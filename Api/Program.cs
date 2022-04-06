@@ -11,7 +11,7 @@ var config = new ConfigurationBuilder()
 //Builder -----------------------------------------
 var builder = WebApplication.CreateBuilder(args);
 //Database -----------------------------------------
-builder.Services.AddDbContext<Context>(x => x.UseMySql("", new MySqlServerVersion(new Version(8, 0, 21))));
+builder.Services.AddDbContext<Context>(x => x.UseMySql(config.GetValue<string>("localConnectionString"), new MySqlServerVersion(new Version(8, 0, 21))));
 //End Database
 //Cors 
 builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
