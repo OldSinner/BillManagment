@@ -1,0 +1,106 @@
+.men {
+  width: 20%;
+  height: 100%;
+  background-color: grey;
+  float: left;
+  color: #008c54;
+}
+.appName {
+  width: 100%;
+  height: 10%;
+  background-color: #323232;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 0 3px 0 #404040;
+}
+.appName img {
+  height: 70%;
+}
+.appName span {
+  font-size: 3.5vh;
+}
+.appName span:hover {
+  cursor: pointer;
+}
+.ui {
+  margin: 0 auto;
+  width: 100%;
+  height: 20%;
+  background-color: #323232;
+  box-shadow: inset 0 0 3px 0 #404040;
+}
+.ui div {
+  width: 100%;
+  height: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2vh;
+}
+.ui div:first-child {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.ui div img {
+  height: 95%;
+}
+.ui div:last-child span:hover {
+  color: #2cba65;
+  cursor: pointer;
+  text-shadow: 0 0 2px #2cba65;
+}
+.ui div img:hover {
+  cursor: pointer;
+}
+.menu {
+  width: 100%;
+  height: 70%;
+  background-color: #323232;
+  box-shadow: inset 0 0 3px 0 #404040;
+}
+.menu div {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2vh;
+}
+.menu div {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2vh;
+}
+.menu div span {
+  width: 75%;
+  height: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #232323;
+  color: #008c54;
+  box-shadow: 1px 1px 5px 0 #333333;
+  text-shadow: 0 0 1px #008c54;
+}
+.menu div span:hover {
+  color: #2cba65;
+  cursor: pointer;
+  background-color: #333333;
+  box-shadow: 1px 1px 5px 0 #787878;
+  text-shadow: 0 0 2px #2cba65;
+}
+.slider {
+  position: absolute;
+  top: 47.5vh;
+  left: 19vw;
+  width: 5vh;
+  height: 5vh;
+  background-color: red;
+}
