@@ -1,0 +1,43 @@
+.addinvoicecont {
+  width: 80%;
+  height: 100%;
+  background-color: #323232;
+  float: left;
+  color: #008c54;
+}
+.addinvoice {
+  width: 35%;
+  height: 35%;
+  margin: 0 auto;
+  position: relative;
+  top: 30%;
+  background-color: #232323;
+  box-shadow: 0 0 0.3vh 0.3vh #434343;
+}
+input[name="submitFaktura"] {
+  margin-top: 2vh;
+  width: 7vw;
+  height: 3vh;
+  line-height: 2.75vh;
+  font-size: 2vh;
+  background-color: #323232;
+  border: none;
+  border-radius: 0.25vh;
+  box-shadow: 0.1vh 0.1vh 0.1vh 0.1vh #4b4a4a;
+  color: #008c54;
+}
+input,
+select {
+  color: lightgrey;
+  margin-top: 1vh;
+  padding-left: 0.5vw;
+  line-height: 3vh;
+  border: none;
+  border-bottom: 0.3vh solid #000;
+  outline: none;
+  background-color: #232323;
+  margin-bottom: 1vh;
+}
+label {
+  margin-right: 1.5vh;
+}
