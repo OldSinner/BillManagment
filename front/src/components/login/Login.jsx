@@ -1,18 +1,30 @@
+import { useRef } from "react";
+import AuthService from "../Auth/AuthService";
 import "./Login.css";
 export default function Sidebar() {
+  const email = useRef(null);
+  const pass = useRef(null);
+  const auth = AuthService;
+  const onSubmit = async () => {
+    await auth.Login(email.current.value, pass.current.value).then((res) => {
+      console.log(res);
+    });
+  };
+
   return (
     <>
       <div className="loginCont">
-        <form className="formularzLogin">
+        <div className="formularzLogin">
           <h2>Logowanie</h2>
           <div className="formGrupa">
             <input
               type="text"
               name="emailLogin"
               className="emailInput"
-              maxlength="100"
+              maxLength="100"
               autofocus="true"
               required
+              ref={email}
             />
             <label for="email">Adres Email</label>
           </div>
@@ -21,18 +33,16 @@ export default function Sidebar() {
               type="password"
               name="passLogin"
               className="passFirstInput"
-              autofocus="true"
+              autoFocus="true"
               required
+              ref={pass}
             />
             <label for="password">Hasło</label>
           </div>
-          <input
-            type="submit"
-            name="submitLogin"
-            className="buttonSubmit"
-            value={"Zaloguj"}
-          />
-        </form>
+          <button className="buttonSubmit" onClick={onSubmit}>
+            Zaloguj
+          </button>
+        </div>
       </div>
     </>
   );

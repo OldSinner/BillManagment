@@ -1,9 +1,33 @@
+import axios from "axios";
+import { useRef } from "react";
+import { Api } from "../Auth/Api";
 import "./Register.css";
 export default function Sidebar() {
+  const inputname = useRef(null);
+  const inputsurname = useRef(null);
+  const inputemail = useRef(null);
+  const inputpass = useRef(null);
+  const inputcpass = useRef(null);
+  const onSubmit = async () => {
+    if (inputpass.current.value != inputcpass.current.value) {
+      return;
+    }
+    axios
+      .post(Api + "auth/register", {
+        Email: inputemail.current.value,
+        FirstName: inputname.current.value,
+        LastName: inputsurname.current.value,
+        Password: inputpass.current.value,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((er) => console.log(er));
+  };
   return (
     <>
       <div className="rejestracjaCont">
-        <form className="formularzRegister">
+        <div className="formularzRegister">
           <h2>Rejestracja</h2>
           <div className="formGrupa">
             <input
@@ -12,6 +36,7 @@ export default function Sidebar() {
               className="nameInput"
               autofocus="true"
               required
+              ref={inputname}
             />
             <label for="password">Imie</label>
           </div>
@@ -22,6 +47,7 @@ export default function Sidebar() {
               className="surnameInput"
               autofocus="true"
               required
+              ref={inputsurname}
             />
             <label for="password">Nazwisko</label>
           </div>
@@ -33,6 +59,7 @@ export default function Sidebar() {
               maxlength="100"
               autofocus="true"
               required
+              ref={inputemail}
             />
             <label for="email">Adres Email</label>
           </div>
@@ -43,6 +70,7 @@ export default function Sidebar() {
               className="passFirstInput"
               autofocus="true"
               required
+              ref={inputpass}
             />
             <label for="password">Hasło</label>
           </div>
@@ -53,16 +81,19 @@ export default function Sidebar() {
               className="passSecondInput"
               autofocus="true"
               required
+              ref={inputcpass}
             />
             <label for="password">Powtórz hasło</label>
           </div>
-          <input
+          <button
             type="submit"
             name="submitRegister"
             className="buttonSubmit"
-            value={"Rejestracja"}
-          />
-        </form>
+            onClick={onSubmit}
+          >
+            Rejestracja
+          </button>
+        </div>
       </div>
     </>
   );

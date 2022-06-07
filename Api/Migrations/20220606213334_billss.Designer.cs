@@ -3,6 +3,7 @@ using System;
 using Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220606213334_billss")]
+    partial class billss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +41,6 @@ namespace api.Migrations
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -80,27 +78,27 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d10813ae-25d4-4e9c-a990-4d0f20139f18"),
+                            Id = new Guid("fb7b94de-2403-46ba-8435-1e7f3c122428"),
                             Name = "Jedzenie"
                         },
                         new
                         {
-                            Id = new Guid("4f96b0b3-3abb-4f89-b0dc-e09e6b3ff6cc"),
+                            Id = new Guid("70dcc456-7d76-4913-8e65-bf942118a447"),
                             Name = "Rozrywka"
                         },
                         new
                         {
-                            Id = new Guid("00ffeb2d-2e61-4411-a617-b548c4026ad8"),
+                            Id = new Guid("4fc42723-c7c0-4d18-a3e9-b00839d04639"),
                             Name = "Opłaty"
                         },
                         new
                         {
-                            Id = new Guid("063146d1-4c72-4c71-826f-fc68744311f6"),
+                            Id = new Guid("7b94e550-8400-4697-b932-215c48d351fb"),
                             Name = "Za dziwki i koks"
                         },
                         new
                         {
-                            Id = new Guid("55b4a9b0-1b84-41cd-9078-2339ae496ee3"),
+                            Id = new Guid("0f898e60-9149-4647-83df-81c785286dc1"),
                             Name = "Paliwo"
                         });
                 });
