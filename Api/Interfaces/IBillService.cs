@@ -8,5 +8,6 @@ namespace Api.Interfaces
         public Task<ServiceResponse<List<BillResponse>>> GetUserBills(string userId);
         public Task<ServiceResponse<BillResponse>> AddBill(BillDto bill, string userId);
         public Task<ServiceResponse<int>> DeleteBill(string id, string userId);
+        public Task<ServiceResponse<BillResponse>> UpdateBill(BillDto dto, string userId);
     }
 }

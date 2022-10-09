@@ -19,7 +19,7 @@ namespace Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register(UserRegisterDto registerDto)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || registerDto == null)
             {
                 return BadRequest(new ServiceResponse<int>()
                 {

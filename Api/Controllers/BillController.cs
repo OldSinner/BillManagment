@@ -44,8 +44,14 @@ namespace Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBill(string id)
         {
-            Console.WriteLine("asda:     " + id);
             var response = await _billService.DeleteBill(id, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> UpdateBill(BillDto bill)
+        {
+            var response = await _billService.UpdateBill(bill, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 

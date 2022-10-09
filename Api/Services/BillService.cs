@@ -224,5 +224,102 @@ namespace Api.Services
                 };
             }
         }
+
+        public async Task<ServiceResponse<BillResponse>> UpdateBill(BillDto dto, string userId)
+        {
+            try
+            {
+                Guid userGuid;
+                var parseSuccess = Guid.TryParse(userId, out userGuid);
+                if (!parseSuccess)
+                {
+                    return new ServiceResponse<BillResponse>()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "UserId is not valid" }
+                    };
+                };
+
+                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    return new ServiceResponse<BillResponse>()
+                    {
+                        IsSuccess = false,
+                        Data = null,
+                        Errors = new List<string>() { "User not found" }
+                    };
+                }
+
+                Guid billGuid;
+                parseSuccess = Guid.TryParse(dto.Id, out billGuid);
+                if (!parseSuccess)
+                {
+                    return new ServiceResponse<BillResponse>()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "GuidId is not valid" }
+                    };
+                };
+
+                var bill = await _context.Bill.Where(x => x.Id == billGuid).FirstOrDefaultAsync();
+                if (bill == null)
+                {
+                    return new ServiceResponse<BillResponse>()
+                    {
+                        IsSuccess = false,
+                        Data = null,
+                        Errors = new List<string>() { "Bill not found" }
+                    };
+                }
+
+                Guid categoryId;
+                parseSuccess = Guid.TryParse(dto.CategoryId, out categoryId);
+                if (!parseSuccess)
+                {
+                    return new ServiceResponse<BillResponse>()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "CategoryId is not valid" }
+                    };
+                };
+
+                var category = await _context.Category.Where(x => x.Id == categoryId).FirstOrDefaultAsync();
+                if (category == null)
+                {
+                    return new ServiceResponse<BillResponse>()
+                    {
+                        IsSuccess = false,
+                        Data = null,
+                        Errors = new List<string>() { "Category not found" }
+                    };
+                }
+
+
+                bill.Title = dto.Title;
+                bill.Amount = (float)Math.Round(dto.Amount, 2);
+                bill.LastModified = DateTime.Now;
+                bill.Category = category;
+
+                _context.Bill.Update(bill);
+                await _context.SaveChangesAsync();
+
+                return new ServiceResponse<BillResponse>()
+                {
+                    IsSuccess = true,
+                    Data = bill.ToBillResponse(),
+                    Errors = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<BillResponse>()
+                {
+                    IsSuccess = false,
+                    Data = null,
+                    Errors = new List<string>() { ex.Message }
+                };
+            }
+        }
     }
 }

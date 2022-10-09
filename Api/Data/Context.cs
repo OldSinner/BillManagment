@@ -17,6 +17,10 @@ namespace Api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Role>().HasData(
+                new Role() { Id = Guid.NewGuid(), Name = "ADMIN" },
+                new Role() { Id = Guid.NewGuid(), Name = "USER" }
+            );
             modelBuilder.Entity<Category>().HasData(new Category
             {
                 Id = Guid.NewGuid(),

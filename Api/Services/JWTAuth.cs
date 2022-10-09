@@ -29,6 +29,9 @@ namespace API.Services
 
             var handler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config["JWTConfig:Secret"]);
+            Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Console.WriteLine(_config["JWTConfig:Secret"]);
+
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
