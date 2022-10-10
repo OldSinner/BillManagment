@@ -22,6 +22,13 @@ namespace Api.Controllers
             var response = await _statisticService.GetBills(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, from, to, categoryId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+        [Authorize]
+        [HttpGet("summary")]
+        public async Task<IActionResult> GetSum([FromQuery] DateTime from, [FromQuery] DateTime to, [FromQuery] string categoryId)
+        {
+            var response = await _statisticService.GetSummary(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, from, to, categoryId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
 
     }
 }
