@@ -1,0 +1,46 @@
+.dashboardCont {
+  width: 80%;
+  height: 100%;
+  float: left;
+  background-color: #323232;
+  color: #008c54;
+}
+.graphsCont {
+  width: 80%;
+  height: 70%;
+  margin: 0 auto;
+  position: relative;
+  top: 15%;
+  background-color: #232323;
+  box-shadow: 0 0 0.3vh 0.3vh #434343;
+}
+.linearCont {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+.circularCont {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+.linearGraphDesc {
+  width: 100%;
+  height: 20%;
+  background-color: red;
+}
+.linearGraph {
+  width: 100%;
+  height: 80%;
+  background-color: green;
+}
+.circularGraphDesc {
+  width: 100%;
+  height: 20%;
+  background-color: green;
+}
+.circularGraph {
+  width: 100%;
+  height: 80%;
+  background-color: red;
+}
