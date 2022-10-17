@@ -6,11 +6,10 @@
   color: #008c54;
 }
 .graphsCont {
-  width: 80%;
-  height: 70%;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
   position: relative;
-  top: 15%;
   background-color: #232323;
   box-shadow: 0 0 0.3vh 0.3vh #434343;
 }
@@ -26,21 +25,17 @@
 }
 .linearGraphDesc {
   width: 100%;
-  height: 20%;
-  background-color: red;
+  height: 15%;
 }
 .linearGraph {
   width: 100%;
-  height: 80%;
-  background-color: green;
+  height: 85%;
 }
 .circularGraphDesc {
   width: 100%;
-  height: 20%;
-  background-color: green;
+  height: 15%;
 }
 .circularGraph {
   width: 100%;
-  height: 80%;
-  background-color: red;
+  height: 85%;
 }

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useRef } from "react";
+import { Apischema } from "../Apischema/Apischema";
 import { Api } from "../Auth/Api";
 import "./Register.css";
 export default function Sidebar() {
   const inputname = useRef(null);
-  const inputsurname = useRef(null);
   const inputemail = useRef(null);
   const inputpass = useRef(null);
   const inputcpass = useRef(null);
@@ -13,10 +13,10 @@ export default function Sidebar() {
       return;
     }
     axios
-      .post(Api + "auth/register", {
+      .post(Apischema.register, {
         Email: inputemail.current.value,
         FirstName: inputname.current.value,
-        LastName: inputsurname.current.value,
+        LastName: "abc",
         Password: inputpass.current.value,
       })
       .then((res) => {
@@ -39,17 +39,6 @@ export default function Sidebar() {
               ref={inputname}
             />
             <label for="password">Imie</label>
-          </div>
-          <div className="formGrupa">
-            <input
-              type="text"
-              name="surnameRegister"
-              className="surnameInput"
-              autofocus="true"
-              required
-              ref={inputsurname}
-            />
-            <label for="password">Nazwisko</label>
           </div>
           <div className="formGrupa">
             <input

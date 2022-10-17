@@ -73,7 +73,6 @@ if (app.Environment.IsDevelopment())
 {
 }
 app.UseCors("corsapp");
-app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
