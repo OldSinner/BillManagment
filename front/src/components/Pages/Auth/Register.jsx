@@ -5,12 +5,11 @@ import {
   FormLabel,
   Input,
   InputGroup,
-  HStack,
-  InputRightElement,
   Stack,
   Button,
   Heading,
   Text,
+  Spinner,
   useColorModeValue,
   Link,
   useToast,
@@ -24,6 +23,7 @@ import axios from 'axios';
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [invalidTable, setInvalidTable] = useState([false, false, false]);
+  const [isLoading, setIsLoading] = useState(false);
   const username = useRef();
   const email = useRef();
   const password = useRef();
@@ -31,6 +31,7 @@ export default function Register() {
   var navigate = useNavigate();
 
   const handleSubmit = () => {
+    setIsLoading(true);
     var errorEmail = false;
     var errorPassword = false;
     var errorUsername = false;
@@ -75,7 +76,9 @@ export default function Register() {
       });
     }
     setInvalidTable([errorUsername, errorEmail, errorPassword]);
+
     if (errorEmail || errorPassword || errorUsername) {
+      setIsLoading(false);
       return;
     }
     axios
@@ -86,6 +89,7 @@ export default function Register() {
         Password: password.current.value,
       })
       .then(res => {
+        setIsLoading(false);
         setTimeout(() => {
           navigate('/');
         }, 2000);
@@ -98,6 +102,7 @@ export default function Register() {
         });
       })
       .catch(err => {
+        setIsLoading(false);
         toast({
           title: 'Wystąpił błąd',
           description: err.response.data.errors[0],
@@ -176,7 +181,7 @@ export default function Register() {
                   handleSubmit();
                 }}
               >
-                Zarejestruj się!
+                {isLoading ? <Spinner color="green.500" /> : 'Zarejestruj się'}
               </Button>
             </Stack>
             <Stack pt={6}>
