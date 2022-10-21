@@ -54,7 +54,7 @@ namespace Api.Services
                     Data = new LoginResponse()
                     {
                         Token = await _auth.GenerateJsonWebToken(user),
-                        UserName = user.FirstName + " " + user.LastName
+                        UserName = user.FirstName
                     }
                 };
             }

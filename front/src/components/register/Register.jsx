@@ -1,29 +1,48 @@
-import axios from "axios";
-import { useRef } from "react";
-import { Apischema } from "../Apischema/Apischema";
-import { Api } from "../Auth/Api";
-import "./Register.css";
+import axios from 'axios'
+import { useRef } from 'react'
+import { Apischema } from '../Apischema/Apischema'
+import { Api } from '../Auth/Api'
+import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import './Register.css'
 export default function Sidebar() {
-  const inputname = useRef(null);
-  const inputemail = useRef(null);
-  const inputpass = useRef(null);
-  const inputcpass = useRef(null);
-  const onSubmit = async () => {
+  const inputname = useRef(null)
+  const inputemail = useRef(null)
+  const inputpass = useRef(null)
+  const inputcpass = useRef(null)
+  var navigate = useNavigate()
+
+  const onSubmit = () => {
     if (inputpass.current.value != inputcpass.current.value) {
-      return;
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Hasła muszą być takie same pedale/hamancie*!',
+        footer: '*-Niepotrzebne skreśl',
+      })
     }
     axios
       .post(Apischema.register, {
         Email: inputemail.current.value,
         FirstName: inputname.current.value,
-        LastName: "abc",
+        LastName: 'abc',
         Password: inputpass.current.value,
       })
       .then((res) => {
-        console.log(res);
+        Swal.fire('Good job!', 'Jesteś debilem!', 'success').then(() => {
+          navigate('/login')
+        })
       })
-      .catch((er) => console.log(er));
-  };
+      .catch((er) => {
+        console.log(er)
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: er.response.data.errors[0],
+          footer: '*-Niepotrzebne skreśl',
+        })
+      })
+  }
   return (
     <>
       <div className="rejestracjaCont">
@@ -78,12 +97,12 @@ export default function Sidebar() {
             type="submit"
             name="submitRegister"
             className="buttonSubmit"
-            onClick={onSubmit}
+            onClick={() => onSubmit()}
           >
             Rejestracja
           </button>
         </div>
       </div>
     </>
-  );
+  )
 }

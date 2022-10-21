@@ -14,7 +14,6 @@
   box-shadow: 0 0 0.3vh 0.3vh #434343;
 }
 .linearCont {
-  width: 50%;
   height: 100%;
   float: left;
 }
@@ -22,6 +21,7 @@
   width: 50%;
   height: 100%;
   float: left;
+  display: flex;
 }
 .linearGraphDesc {
   width: 100%;
@@ -29,7 +29,6 @@
 }
 .linearGraph {
   width: 100%;
-  height: 85%;
 }
 .circularGraphDesc {
   width: 100%;
@@ -37,5 +36,5 @@
 }
 .circularGraph {
   width: 100%;
-  height: 85%;
+  height: 33%;
 }

@@ -4,20 +4,25 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 .loginCont {
-  margin: 0 auto;
-  width: 20%;
-  height: 35%;
   background-color: #232323;
+
+  margin: 0 auto;
+  width: 20vw;
+  height: 35vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   position: relative;
   top: 25%;
   text-align: center;
   border-radius: 1vh;
+}
+.logo {
+  font-size: 42px;
 }
 .formularzLogin {
   width: 100%;
@@ -31,8 +36,8 @@ body {
   position: relative;
   margin-bottom: 1vh;
 }
-.loginCont h2 {
-  font-size: 4vh;
+.loginCont h3 {
+  font-size: 2vh;
   letter-spacing: 0.1vw;
   color: #008c54;
 }
@@ -60,9 +65,9 @@ body {
   left: 0;
   color: #2cba65;
 }
-input[name="submitLogin"] {
+.buttonSubmit {
   margin-top: 2vh;
-  width: 4vw;
+  width: auto;
   height: 3vh;
   line-height: 2.75vh;
   font-size: 2vh;
@@ -72,9 +77,26 @@ input[name="submitLogin"] {
   box-shadow: 0.1vh 0.1vh 0.1vh 0.1vh #4b4a4a;
   color: #008c54;
 }
-input[type="submit"]:hover {
+.buttonSubmit:hover {
   color: #2cba65;
   background-color: #383838;
   box-shadow: 0.1vh 0.1vh 0.1vh 0.1vh #3f3e3e;
   cursor: pointer;
+}
+@media only screen and (max-width: 750px) {
+  .loginCont {
+    background-color: #232323;
+
+    margin: 0 auto;
+    width: 80%;
+    height: 35vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    top: 25%;
+    text-align: center;
+    border-radius: 1vh;
+  }
 }

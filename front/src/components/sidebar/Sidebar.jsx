@@ -1,19 +1,23 @@
-import "./Sidebar.css";
-import logo from "../../Assets/logo.png";
-import avatarPic from "../../Assets/avatar.png";
+import './Sidebar.css'
+import logo from '../../Assets/logo.png'
+import avatarPic from '../../Assets/avatar.png'
+import AuthService from '../Auth/AuthService'
 export default function Sidebar() {
+  const auth = AuthService
+
+  var user = auth.getCurrentUser()
   return (
     <div className="men">
       <div className="appName">
         <img src={logo} alt="logo" />
-        <span>&nbsp;Appname</span>
+        <span>&nbsp;sklej wary lapsie</span>
       </div>
       <div className="ui">
         <div className="avatarPic">
           <img src={avatarPic} alt="avatar picture" />
         </div>
         <div>
-          <span>Imie Nazwisko</span>
+          <span>{user?.userName != null ? user.userName : 'Kutas Kozła'}</span>
         </div>
         <div>
           <span>Ustawienia konta</span>
@@ -40,5 +44,5 @@ export default function Sidebar() {
         </div>
       </div>
     </div>
-  );
+  )
 }

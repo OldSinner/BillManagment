@@ -4,7 +4,7 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 .rejestracjaCont {
   margin: 0 auto;
@@ -60,9 +60,9 @@ body {
   left: 0;
   color: #2cba65;
 }
-input[name="submitRegister"] {
+button[name='submitRegister'] {
   margin-top: 2vh;
-  width: 6vw;
+  width: auto;
   height: 3vh;
   line-height: 2.75vh;
   font-size: 2vh;
@@ -72,7 +72,7 @@ input[name="submitRegister"] {
   box-shadow: 0.1vh 0.1vh 0.1vh 0.1vh #4b4a4a;
   color: #008c54;
 }
-input[type="submit"]:hover {
+button[type='submit']:hover {
   color: #2cba65;
   background-color: #383838;
   box-shadow: 0.1vh 0.1vh 0.1vh 0.1vh #3f3e3e;

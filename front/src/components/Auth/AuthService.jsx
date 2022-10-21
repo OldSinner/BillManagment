@@ -1,32 +1,33 @@
-import { Api } from "./Api.jsx";
-import axios from "axios";
+import { Api } from './Api.jsx'
+import axios from 'axios'
 
 class AuthService {
   async Login(Email, Password) {
-    var response;
+    var response
     await axios
-      .post(Api + "auth/login", { Email, Password })
+      .post(Api + 'auth/login', { Email, Password })
       .then((res) => {
-        localStorage.setItem("user", JSON.stringify(res.data.data));
-        response = res.data;
+        localStorage.setItem('user', JSON.stringify(res.data.data))
+        response = res.data
       })
       .catch((err) => {
-        response = err.response;
-      });
-    return response;
+        response = err.response.data
+      })
+    return response
   }
+  constructor() {}
   logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem('user')
   }
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    return JSON.parse(localStorage.getItem('user'))
   }
   isLogged() {
-    if (process.env.NODE_ENV !== "production") return true;
-    var user = localStorage.getItem("user");
-    if (user) return true;
-    else return false;
+    if (process.env.NODE_ENV !== 'production') return true
+    var user = localStorage.getItem('user')
+    if (user) return true
+    else return false
   }
 }
 
-export default new AuthService();
+export default new AuthService()

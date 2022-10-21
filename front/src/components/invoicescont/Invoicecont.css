@@ -23,22 +23,22 @@ table td,
 table th {
   border: 0.2vh solid #000;
 }
+table tr th {
+  width: 15%;
+  height: 8vh;
+  line-height: 8vh;
+}
 table tr th:first-child {
   width: 20%;
   height: 8vh;
   line-height: 8vh;
 }
-table tr th {
-  width: 70%;
+table tr th:nth-child(2) {
+  width: 50%;
   height: 8vh;
   line-height: 8vh;
   background-color: #292929;
   font-size: 3vh;
-}
-table tr th:last-child {
-  width: 10%;
-  height: 8vh;
-  line-height: 8vh;
 }
 table tr td:first-child {
   width: 20%;
@@ -46,16 +46,24 @@ table tr td:first-child {
   line-height: 6vh;
 }
 table tr td {
-  width: 70%;
+  width: 50%;
   height: 6vh;
   line-height: 6vh;
   font-size: 2vh;
 }
-table tr td:last-child {
-  width: 10%;
+table tr td:nth-child(3) {
+  width: 15%;
   height: 6vh;
   line-height: 6vh;
   font-size: 3vh;
   font-style: italic;
   color: red;
+}
+table tr td:last-child{
+  width: 15%;
+  height: 6vh;
+  line-height: 6vh;
+  font-size: 3vh;
+  font-style: italic;
+  color: #FFD700;
 }
