@@ -187,7 +187,9 @@ export default function Register() {
             <Stack pt={6}>
               <Text align={'center'}>
                 Jesteś już użytkownikiem?{' '}
-                <Link color={'green.400'}>Zaloguj się</Link>
+                <Link href="/login" color={'green.400'}>
+                  Zaloguj się
+                </Link>
               </Text>
             </Stack>
           </Stack>

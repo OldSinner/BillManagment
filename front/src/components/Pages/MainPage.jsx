@@ -48,10 +48,10 @@ export default function MainPage() {
                 bg: 'green.500',
               }}
               onClick={() => {
-                window.location.href = '/register';
+                window.location.href = '/login';
               }}
             >
-              Zaloguj się
+              Dołącz do nas
             </Button>
             <Button rounded={'full'}>Kim jesteśmy</Button>
           </Stack>
