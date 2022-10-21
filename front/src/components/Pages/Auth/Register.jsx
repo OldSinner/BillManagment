@@ -13,11 +13,100 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast,
 } from '@chakra-ui/react';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { Apischema } from '../../ApiSchema';
+import axios from 'axios';
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const [invalidTable, setInvalidTable] = useState([false, false, false]);
+  const username = useRef();
+  const email = useRef();
+  const password = useRef();
+  const toast = useToast();
+  var navigate = useNavigate();
+
+  const handleSubmit = () => {
+    var errorEmail = false;
+    var errorPassword = false;
+    var errorUsername = false;
+    if (username.current.value.length < 3) {
+      errorUsername = true;
+      toast({
+        title: 'Niepoprawna nazwa użytkownika.',
+        description: 'Nazwa użytkownika musi zawierać conajmniej 3 znaki.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+    if (email.current.value.length < 3) {
+      errorEmail = true;
+      toast({
+        title: 'Niepoprawny adres email.',
+        description: 'Adres email musi zawierać conajmniej 3 znaki.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+    if (!email.current.value.includes('@')) {
+      errorEmail = true;
+      toast({
+        title: 'Niepoprawny adres email.',
+        description: 'Adres email musi zawierać znak @.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+    if (password.current.value.length < 6) {
+      errorPassword = true;
+      toast({
+        title: 'Niepoprawne hasło.',
+        description: 'Hasło musi zawierać conajmniej 6 znaków.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+    setInvalidTable([errorUsername, errorEmail, errorPassword]);
+    if (errorEmail || errorPassword || errorUsername) {
+      return;
+    }
+    axios
+      .post(Apischema.register, {
+        Email: email.current.value,
+        FirstName: username.current.value,
+        LastName: 'abc',
+        Password: password.current.value,
+      })
+      .then(res => {
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+        toast({
+          title: 'Rejestracja przebiegła pomyślnie.',
+          description: 'Możesz się teraz zalogować.',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+        });
+      })
+      .catch(err => {
+        toast({
+          title: 'Wystąpił błąd',
+          description: err.response.data.errors[0],
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        });
+      });
+  };
 
   return (
     <Flex
@@ -45,20 +134,32 @@ export default function Register() {
             <Box>
               <FormControl id="firstName" isRequired>
                 <FormLabel>Pseudonim</FormLabel>
-                <Input type="text" focusBorderColor={'green.400'} />
+                <Input
+                  isInvalid={invalidTable[0]}
+                  type="text"
+                  focusBorderColor={'green.400'}
+                  ref={username}
+                />
               </FormControl>
             </Box>
 
             <FormControl id="email" isRequired>
               <FormLabel>Adres Email</FormLabel>
-              <Input type="email" focusBorderColor={'green.400'} />
+              <Input
+                type="email"
+                isInvalid={invalidTable[1]}
+                focusBorderColor={'green.400'}
+                ref={email}
+              />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <Input
+                  isInvalid={invalidTable[2]}
                   type={showPassword ? 'text' : 'password'}
                   focusBorderColor={'green.400'}
+                  ref={password}
                 />
               </InputGroup>
             </FormControl>
@@ -70,6 +171,9 @@ export default function Register() {
                 color={'white'}
                 _hover={{
                   bg: 'green.500',
+                }}
+                onClick={() => {
+                  handleSubmit();
                 }}
               >
                 Zarejestruj się!
