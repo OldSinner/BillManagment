@@ -11,58 +11,93 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
 export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <Flex
       pos="sticky"
       flexDirection={'column'}
       left={0}
-      w={'200px'}
+      w={isOpen ? '200px' : '60px'}
       h={'100vh'}
-      borderRadius="20px"
-      boxShadow="13px 14px 24px -21px rgba(66, 68, 90, 1)"
+      borderRightRadius="30px"
       p={1}
       backgroundColor={useColorModeValue('gray.500', 'gray.900')}
       alignItems={'center'}
+      justifyContent={'space-between'}
+      transition="all 0.5s ease"
     >
       <Flex flexDir={'column'} justifyContent="center">
         <Center>{'<'}</Center>
-        <Image boxSize="100px" objectFit="cover" src={logo} alt="Logo" m={1} />
-        <Divider m={1} />
-        <Flex flexDir="column" justifyContent={'center'} alignItems={'center'}>
-          <Center>
-            <Text>Zalogowany jako:</Text>
-          </Center>
-          <Center>
-            <Text
-              color={useColorModeValue('gray.100', 'green.500')}
-              fontWeight={400}
-              fontSize={'xl'}
-            >
-              Username
-            </Text>
-          </Center>
+        <Center>
+          <Image
+            boxSize={isOpen ? '100px' : '50px'}
+            objectFit="cover"
+            src={logo}
+            alt="Logo"
+            m={1}
+            transition="all 0.5s ease"
+          />
+        </Center>
+        <Divider m={1} w={isOpen ? '100%' : '75%'} transition="all 0.5s ease" />
+        <Flex
+          flexDir="column"
+          justifyContent={'center'}
+          alignItems={'center'}
+        ></Flex>
+        <Flex flexDir={'column'} justifyContent="space-between">
+          <NavItem text={'Home'} link="/dassh" isOpen={isOpen} />
+          <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
+          <NavItem text={'Home'} isOpen={isOpen} />
+          <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
+          <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
+
+          <Divider w={isOpen ? '100%' : '75%'} transition="all 0.5s ease" />
         </Flex>
       </Flex>
-      <Flex flexDir={'column'} justifyContent="space-between">
-        <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
-        <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
-        <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
-        <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
-        <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
-
-        <Divider w={'100%'} />
+      <Flex flexDir={'column'} justifyContent="center">
+        {isOpen ? (
+          <>
+            <Center>
+              <Text>Zalogowany jako:</Text>
+            </Center>
+            <Center>
+              <Text color={'green.500'} fontWeight={400} fontSize={'xl'}>
+                Username
+              </Text>
+            </Center>
+            <Center>
+              <Text
+                color={'gray.700'}
+                fontWeight={400}
+                fontSize={'lg'}
+                cursor={'pointer'}
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                Wyloguj
+              </Text>
+            </Center>
+          </>
+        ) : (
+          <Icon
+            fontSize={'20px'}
+            mb={5}
+            cursor={'pointer'}
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+          />
+        )}
       </Flex>
     </Flex>
   );
 }
-
 export function NavItem({ text, icon, link, isOpen }) {
   return (
     <Link href={link}>
       <Flex
         boxShadow={' 0px 0px 45px -17px rgba(66, 68, 90, 1);'}
         p={10}
+        w={isOpen ? '100%' : '20%'}
         borderRadius={'lg'}
         align={'center'}
         m={2}
