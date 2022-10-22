@@ -6,6 +6,7 @@ import MainPage from './components/Pages/MainPage';
 import Register from './components/Pages/Auth/Register';
 import Login from './components/Pages/Auth/Login';
 import Layout from './components/Layout';
+import BillList from './components/Pages/BillList';
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -19,6 +20,14 @@ function App() {
             element={
               <Layout>
                 <Text>Test</Text>
+              </Layout>
+            }
+          ></Route>
+          <Route
+            path="/list"
+            element={
+              <Layout>
+                <BillList />
               </Layout>
             }
           ></Route>

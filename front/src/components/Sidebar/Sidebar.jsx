@@ -6,10 +6,12 @@ import {
   Image,
   Text,
   useColorModeValue,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
+import { HiArrowCircleLeft, HiArrowCircleRight } from 'react-icons/hi';
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   return (
@@ -27,7 +29,19 @@ export function Sidebar() {
       transition="all 0.5s ease"
     >
       <Flex flexDir={'column'} justifyContent="center">
-        <Center>{'<'}</Center>
+        <Center
+          fontSize={'40px'}
+          color={'green.400'}
+          transition="all 0.5s ease"
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+          cursor="pointer"
+        >
+          {isOpen ? <HiArrowCircleLeft /> : <HiArrowCircleRight />}
+        </Center>
+        <Divider m={1} w={isOpen ? '100%' : '75%'} transition="all 0.5s ease" />
+
         <Center>
           <Image
             boxSize={isOpen ? '100px' : '50px'}
@@ -45,7 +59,7 @@ export function Sidebar() {
           alignItems={'center'}
         ></Flex>
         <Flex flexDir={'column'} justifyContent="space-between">
-          <NavItem text={'Home'} link="/dassh" isOpen={isOpen} />
+          <NavItem text={'Home'} link="/bill" isOpen={isOpen} />
           <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
           <NavItem text={'Home'} isOpen={isOpen} />
           <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
@@ -71,21 +85,13 @@ export function Sidebar() {
                 fontWeight={400}
                 fontSize={'lg'}
                 cursor={'pointer'}
-                onClick={() => setIsOpen(!isOpen)}
               >
                 Wyloguj
               </Text>
             </Center>
           </>
         ) : (
-          <Icon
-            fontSize={'20px'}
-            mb={5}
-            cursor={'pointer'}
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
-          />
+          <Icon fontSize={'20px'} mb={5} cursor={'pointer'} />
         )}
       </Flex>
     </Flex>
@@ -108,10 +114,12 @@ export function NavItem({ text, icon, link, isOpen }) {
           bg: useColorModeValue('green.400', 'green.400'),
         }}
       >
-        <Center>
-          <Icon fontSize={'20px'} as={icon} mr={isOpen ? 3 : 0} />
-          {isOpen ? text : ''}
-        </Center>
+        <Tooltip label={text} aria-label="A tooltip">
+          <Center>
+            <Icon fontSize={'20px'} as={icon} mr={isOpen ? 3 : 0} />
+            {isOpen ? text : ''}
+          </Center>
+        </Tooltip>
       </Flex>
     </Link>
   );
