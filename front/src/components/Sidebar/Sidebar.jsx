@@ -12,8 +12,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
 import { HiArrowCircleLeft, HiArrowCircleRight } from 'react-icons/hi';
-export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+export function Sidebar({ isOpen, setIsOpen }) {
   return (
     <Flex
       pos="sticky"
@@ -21,6 +20,7 @@ export function Sidebar() {
       left={0}
       w={isOpen ? '200px' : '60px'}
       h={'100vh'}
+      maxH={'100vh'}
       borderRightRadius="30px"
       p={1}
       backgroundColor={useColorModeValue('gray.500', 'gray.900')}
