@@ -14,14 +14,14 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Apischema } from '../../ApiSchema';
 import axios from 'axios';
+import { IsLogged } from '../../../Utils/Auth';
 
 export default function Register() {
-  const [showPassword, setShowPassword] = useState(false);
   const [invalidTable, setInvalidTable] = useState([false, false, false]);
   const [isLoading, setIsLoading] = useState(false);
   const username = useRef();
@@ -29,6 +29,10 @@ export default function Register() {
   const password = useRef();
   const toast = useToast();
   var navigate = useNavigate();
+
+  useEffect(() => {
+    if (IsLogged) navigate('/dash');
+  }, []);
 
   const handleSubmit = () => {
     setIsLoading(true);
@@ -162,7 +166,7 @@ export default function Register() {
               <InputGroup>
                 <Input
                   isInvalid={invalidTable[2]}
-                  type={showPassword ? 'text' : 'password'}
+                  type={'password'}
                   focusBorderColor={'green.400'}
                   ref={password}
                 />

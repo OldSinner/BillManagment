@@ -10,7 +10,10 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import PersonCard from '../PersonCard';
-
+import AvatarMaks from '../../Assets/maksiuavatar.png';
+import AvatarSebastian from '../../Assets/seba.png';
+import AvatarMaja from '../../Assets/maja.png';
+import AvatarAdrian from '../../Assets/adi.png';
 export default function MainPage() {
   return (
     <>
@@ -73,10 +76,34 @@ export default function MainPage() {
       </Stack>
       <Divider />
       <Stack direction="row">
-        <PersonCard name={'Maksymilian Przysiwek'} />
-        <PersonCard name={'Maja Lisowska'} />
-        <PersonCard name={'Adrian Żabiński'} />
-        <PersonCard name={'Sebastian Michalski'} />
+        <PersonCard
+          name={'Maksymilian Przysiwek'}
+          desc={
+            'Lider projektu, interesuję się programowaniem, tworzeniem stron internetowych od stony backendu, uwielbiany przez wszystkich, UWIELBIA koty. Uważa je za rasę nadrzędną i czeka na powrót wielkiego Anubisa.'
+          }
+          avatar={AvatarMaks}
+        />
+        <PersonCard
+          name={'Maja Lisowska'}
+          desc={
+            'Interesuje się grafiką komputerową i jazdę konną, lubi taniec. Miłośniczka kotów.'
+          }
+          avatar={AvatarMaja}
+        />
+        <PersonCard
+          name={'Adrian Żabiński'}
+          desc={
+            'Interesuje się programowaniem, japońskimi samochodami i modyfikowaniem samochodów, w przeciwieństwie do reszty grupy preferuje psy.'
+          }
+          avatar={AvatarAdrian}
+        />
+        <PersonCard
+          name={'Sebastian Michalski'}
+          desc={
+            'Interesuje się tworzeniem gier, tworzeniem stron internetowych od strony frontendu, w wolnym czasie lubi grać.'
+          }
+          avatar={AvatarSebastian}
+        />
       </Stack>
     </>
   );

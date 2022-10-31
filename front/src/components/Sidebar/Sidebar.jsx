@@ -8,11 +8,21 @@ import {
   useColorModeValue,
   Tooltip,
 } from '@chakra-ui/react';
+
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
-import { HiArrowCircleLeft, HiArrowCircleRight } from 'react-icons/hi';
+import {
+  HiArrowCircleLeft,
+  HiArrowCircleRight,
+  HiCurrencyDollar,
+  HiOutlineHome,
+  HiOutlineLogout,
+} from 'react-icons/hi';
+import { GetUser, LogOut } from '../../Utils/Auth';
 export function Sidebar({ isOpen, setIsOpen }) {
+  var navigate = useNavigate();
+  var user = GetUser();
   return (
     <Flex
       pos="sticky"
@@ -59,8 +69,18 @@ export function Sidebar({ isOpen, setIsOpen }) {
           alignItems={'center'}
         ></Flex>
         <Flex flexDir={'column'} justifyContent="space-between">
-          <NavItem text={'Home'} link="/bill" isOpen={isOpen} />
-          <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
+          <NavItem
+            text={'Home'}
+            link="/dash"
+            isOpen={isOpen}
+            icon={HiOutlineHome}
+          />
+          <NavItem
+            text={'Rachunki'}
+            link="/list"
+            isOpen={isOpen}
+            icon={HiCurrencyDollar}
+          />
           <NavItem text={'Home'} isOpen={isOpen} />
           <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
           <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
@@ -76,10 +96,15 @@ export function Sidebar({ isOpen, setIsOpen }) {
             </Center>
             <Center>
               <Text color={'green.500'} fontWeight={400} fontSize={'xl'}>
-                Username
+                {user.UserName}
               </Text>
             </Center>
-            <Center>
+            <Center
+              onClick={() => {
+                LogOut();
+                navigate('/login');
+              }}
+            >
               <Text
                 color={'gray.700'}
                 fontWeight={400}
@@ -91,36 +116,48 @@ export function Sidebar({ isOpen, setIsOpen }) {
             </Center>
           </>
         ) : (
-          <Icon fontSize={'20px'} mb={5} cursor={'pointer'} />
+          <Icon
+            fontSize={'20px'}
+            mb={5}
+            as={HiOutlineLogout}
+            cursor={'pointer'}
+            onClick={() => {
+              LogOut();
+              navigate('/login');
+            }}
+          />
         )}
       </Flex>
     </Flex>
   );
 }
 export function NavItem({ text, icon, link, isOpen }) {
+  var navigate = useNavigate();
   return (
-    <Link href={link}>
-      <Flex
-        boxShadow={' 0px 0px 45px -17px rgba(66, 68, 90, 1);'}
-        p={10}
-        w={isOpen ? '100%' : '20%'}
-        borderRadius={'lg'}
-        align={'center'}
-        m={2}
-        py={2}
-        transition={'all 0.3s ease'}
-        _hover={{
-          textDecoration: 'none',
-          bg: useColorModeValue('green.400', 'green.400'),
-        }}
-      >
-        <Tooltip label={text} aria-label="A tooltip">
-          <Center>
-            <Icon fontSize={'20px'} as={icon} mr={isOpen ? 3 : 0} />
-            {isOpen ? text : ''}
-          </Center>
-        </Tooltip>
-      </Flex>
-    </Link>
+    <Flex
+      boxShadow={' 0px 0px 45px -17px rgba(66, 68, 90, 1);'}
+      p={10}
+      w={isOpen ? '100%' : '20%'}
+      borderRadius={'lg'}
+      align={'center'}
+      m={2}
+      py={2}
+      cursor={'pointer'}
+      transition={'all 0.3s ease'}
+      _hover={{
+        textDecoration: 'none',
+        bg: useColorModeValue('green.400', 'green.400'),
+      }}
+      onClick={() => {
+        navigate(link);
+      }}
+    >
+      <Tooltip label={text} aria-label="A tooltip">
+        <Center>
+          <Icon fontSize={'20px'} as={icon} mr={isOpen ? 3 : 0} />
+          {isOpen ? text : ''}
+        </Center>
+      </Tooltip>
+    </Flex>
   );
 }

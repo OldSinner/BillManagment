@@ -26,7 +26,7 @@ namespace Api.Controllers
                 return BadRequest(new ServiceResponse<int>()
                 {
                     IsSuccess = false,
-                    Data = 1,
+                    Data = 5,
                     Errors = ModelState.Values.SelectMany(v => v.Errors).Select(x => x.ErrorMessage).ToList()
                 });
             }
@@ -35,11 +35,13 @@ namespace Api.Controllers
         }
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetBills()
+        public async Task<IActionResult> GetBills(DateTime from, DateTime to, string category, float fromAmount, float toAmount)
         {
-            var response = await _billService.GetUserBills(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            Console.WriteLine(category);
+            var response = await _billService.GetUserBills(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, from, to, category, fromAmount, toAmount);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+
         [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBill(string id)

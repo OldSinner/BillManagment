@@ -80,27 +80,27 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d10813ae-25d4-4e9c-a990-4d0f20139f18"),
+                            Id = new Guid("3400ed3d-a078-48e9-960a-622c74dbff55"),
                             Name = "Jedzenie"
                         },
                         new
                         {
-                            Id = new Guid("4f96b0b3-3abb-4f89-b0dc-e09e6b3ff6cc"),
+                            Id = new Guid("33cc3766-1c27-4516-8e12-c5d1cd9517a6"),
                             Name = "Rozrywka"
                         },
                         new
                         {
-                            Id = new Guid("00ffeb2d-2e61-4411-a617-b548c4026ad8"),
+                            Id = new Guid("901bd09a-9969-46a7-812e-b9ff854144ec"),
                             Name = "Opłaty"
                         },
                         new
                         {
-                            Id = new Guid("063146d1-4c72-4c71-826f-fc68744311f6"),
+                            Id = new Guid("9bf91b6e-853a-40f6-8763-f5b654c57da5"),
                             Name = "Za dziwki i koks"
                         },
                         new
                         {
-                            Id = new Guid("55b4a9b0-1b84-41cd-9078-2339ae496ee3"),
+                            Id = new Guid("f76b4278-53b1-44e2-a399-6048f309d4f5"),
                             Name = "Paliwo"
                         });
                 });
@@ -133,6 +133,18 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("dd45a2ed-7345-4b07-ba7f-0036a159b52d"),
+                            Name = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("1b982032-6097-4dc5-a9d7-478dcb684e66"),
+                            Name = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Api.Models.User", b =>

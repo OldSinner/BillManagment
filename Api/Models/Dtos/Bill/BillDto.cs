@@ -5,6 +5,7 @@ namespace Api.Models.Dtos.Bill
         public string? Id { get; set; }
         public string Title { get; set; }
         public float Amount { get; set; }
-        public string CategoryId { get; set; }
+        public string? CategoryId { get; set; }
+        public DateTime Date { get; set; }
     }
 }

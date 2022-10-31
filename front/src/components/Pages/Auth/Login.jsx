@@ -13,10 +13,14 @@ import {
   useColorModeValue,
   useToast,
   Center,
+  Spinner,
 } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Apischema } from '../../ApiSchema';
+import { IsLogged, SaveUser } from '../../../Utils/Auth';
 
 export default function Login() {
   const [invalidTable, setInvalidTable] = useState([false, false]);
@@ -25,6 +29,10 @@ export default function Login() {
   const password = useRef();
   var navigate = useNavigate();
   const toast = useToast();
+
+  useEffect(() => {
+    if (IsLogged()) navigate('/dash');
+  }, []);
 
   const handleSubmit = () => {
     setIsLoading(true);
@@ -35,27 +43,30 @@ export default function Login() {
       errorEmail = true;
       toast({
         title: 'Niepoprawny adres email.',
-        description: 'Adres email musi zawierać conajmniej 3 znaki.',
+        description: 'Email nie może być pusty.',
         status: 'error',
         duration: 2000,
         isClosable: true,
       });
     }
-    if (!email.current.value.includes('@')) {
+    if (
+      !email.current.value.includes('@') ||
+      !email.current.value.includes('.')
+    ) {
       errorEmail = true;
       toast({
         title: 'Niepoprawny adres email.',
-        description: 'Adres email musi zawierać znak @.',
+        description: 'Email jest niepoprawny.',
         status: 'error',
         duration: 2000,
         isClosable: true,
       });
     }
-    if (password.current.value.length < 6) {
+    if (password.current.value.length < 2) {
       errorPassword = true;
       toast({
         title: 'Niepoprawne hasło.',
-        description: 'Hasło musi zawierać conajmniej 6 znaków.',
+        description: 'Hasło nie może być puste.',
         status: 'error',
         duration: 2000,
         isClosable: true,
@@ -68,6 +79,37 @@ export default function Login() {
       setIsLoading(false);
       return;
     }
+
+    axios
+      .post(Apischema.login, {
+        email: email.current.value,
+        password: password.current.value,
+      })
+      .then(response => {
+        setTimeout(() => {
+          navigate('/dash');
+        }, 1000);
+        toast({
+          title: 'Witamy!',
+          description:
+            'Udało się zalogować! Za chwilę przeniesiemy Cię nas tronę główną.',
+          status: 'success',
+          duration: 1000,
+          isClosable: true,
+        });
+        SaveUser(response.data);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        toast({
+          title: 'Wystąpił Błąd',
+          description: error.response.data.errors[0],
+          status: 'error',
+          duration: 1000,
+          isClosable: true,
+        });
+        setIsLoading(false);
+      });
   };
   return (
     <Flex
@@ -92,11 +134,15 @@ export default function Login() {
           <Stack spacing={4}>
             <FormControl id="email">
               <FormLabel>Adres Email</FormLabel>
-              <Input type="email" />
+              <Input type="email" ref={email} isInvalid={invalidTable[0]} />
             </FormControl>
             <FormControl id="password">
               <FormLabel>Hasło</FormLabel>
-              <Input type="password" />
+              <Input
+                type="password"
+                ref={password}
+                isInvalid={invalidTable[1]}
+              />
             </FormControl>
             <Stack spacing={10}>
               <Stack
@@ -112,8 +158,9 @@ export default function Login() {
                 _hover={{
                   bg: 'green.500',
                 }}
+                onClick={handleSubmit}
               >
-                Zaloguj się
+                {isLoading ? <Spinner color="green.500" /> : 'Zaloguj się'}
               </Button>
             </Stack>
             <Text fontSize={'lg'} color={'gray.600'} align={'center'}>

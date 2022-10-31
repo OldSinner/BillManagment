@@ -77,7 +77,7 @@ namespace Api.Services
                     Owner = user,
                     Amount = (float)Math.Round(bill.Amount, 2),
                     Category = category,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = bill.Date,
                     LastModified = DateTime.Now,
                     Title = bill.Title
                 };
@@ -174,10 +174,19 @@ namespace Api.Services
             }
         }
 
-        public async Task<ServiceResponse<List<BillResponse>>> GetUserBills(string userId)
+        public async Task<ServiceResponse<List<BillResponse>>> GetUserBills(string userId, DateTime from, DateTime to, string category = "ALL", float fromAmount = float.MinValue, float toAmount = float.MaxValue)
         {
             try
             {
+                if (from.Year == 1)
+                {
+                    from = DateTime.MinValue;
+                }
+                if (to.Year == 1)
+                {
+                    to = DateTime.MaxValue;
+                }
+
                 Guid userGuid;
                 var parseSuccess = Guid.TryParse(userId, out userGuid);
                 if (!parseSuccess)
@@ -199,12 +208,22 @@ namespace Api.Services
                         Errors = new List<string>() { "User not found" }
                     };
                 }
-                var bills = await _context.Bill.Where(x => x.Owner.Id == user.Id).Include(x => x.Category).ToListAsync();
+                var bills = await _context.Bill.Where(x => x.Owner.Id == user.Id && Math.Abs(x.Amount) >= fromAmount && Math.Abs(x.Amount) >= toAmount && x.CreatedDate >= from && x.CreatedDate <= to).Include(x => x.Category).ToListAsync();
                 List<BillResponse> billResponses = new List<BillResponse>();
 
                 foreach (var bill in bills)
                 {
-                    billResponses.Add(bill.ToBillResponse());
+                    if (category == "ALL")
+                    {
+                        billResponses.Add(bill.ToBillResponse());
+                    }
+                    else
+                    {
+                        if (bill.Category.Id.ToString() == category)
+                        {
+                            billResponses.Add(bill.ToBillResponse());
+                        }
+                    }
                 }
 
                 return new ServiceResponse<List<BillResponse>>()

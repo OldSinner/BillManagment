@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Api.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -13,6 +14,7 @@ namespace Api.Controllers
         {
             _categoryService = categoryService;
         }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetCategory()
         {
