@@ -9,7 +9,6 @@ import {
   Td,
   TableCaption,
   TableContainer,
-  Tab,
   Center,
   Button,
   Text,
@@ -27,6 +26,12 @@ import {
   ModalBody,
   ModalFooter,
   useToast,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from '@chakra-ui/react';
 import axios from 'axios';
 
@@ -48,33 +53,33 @@ const CustomInput = forwardRef(({ value, onClick }, ref) => (
     {value}
   </Button>
 ));
+const handleAmount = amount => {
+  if (amount < 0) {
+    return <Text color="red.500">{amount}</Text>;
+  }
+  return <Text color="green.500">{amount}</Text>;
+};
+const handleIcon = bill => {
+  if (bill.Amount < 0) return <RiArrowDownSLine></RiArrowDownSLine>;
+  return <RiArrowUpSLine></RiArrowUpSLine>;
+};
+const changeToDot = value => {
+  return value.replace(',', '.');
+};
 
 const dayjs = require('dayjs');
 export default function BillList() {
-  const handleAmount = amount => {
-    if (amount < 0) {
-      return <Text color="red.500">{amount * -1}</Text>;
-    }
-    return <Text color="green.500">{amount}</Text>;
-  };
-  const handleIcon = bill => {
-    if (bill.Amount < 0) return <RiArrowDownSLine></RiArrowDownSLine>;
-    return <RiArrowUpSLine></RiArrowUpSLine>;
-  };
-  const changeToDot = value => {
-    console.log(value);
-    return value.replace(',', '.');
-  };
-  const [refresh, setRefresh] = useState(0);
+  //Data
   var user = GetUser();
+  //Refs
   var categoryRef = useRef();
   var amountFromRef = useRef();
   var amountToRef = useRef();
+  //states
   const [categories, setCategory] = useState();
-
+  const [refresh, setRefresh] = useState(0);
   const [bills, setBills] = useState();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [idtoDelete, setIdToDelete] = useState();
 
   const [startDate, setStartDate] = useState(
     new Date(dayjs().startOf('month').format('YYYY-MM-DD HH:mm:ss'))
@@ -82,11 +87,16 @@ export default function BillList() {
   const [endDate, setEndDate] = useState(
     new Date(dayjs().endOf('month').format('YYYY-MM-DD HH:mm:ss'))
   );
+  //Modal
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  //Effects
   useEffect(() => {
     QueryCategory();
     QueryData();
   }, [refresh]);
 
+  //Queries
   const QueryData = () => {
     axios
       .get(Apischema.bills, {
@@ -113,146 +123,217 @@ export default function BillList() {
       });
   };
 
+  //Render
   return (
-    <Center>
-      <BillAddModal
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        categories={categories}
-        refresh={refresh}
-        setRefresh={setRefresh}
-      />
-      <TableContainer w={'100%'}>
-        <Table variant={'simple'}>
-          <TableCaption>
-            <Flex>
-              <Button onClick={onOpen}>Dodaj Nowy Rachunek</Button>
-              <Button
-                ml={2}
-                onClick={() => {
-                  QueryData();
-                }}
-              >
-                Odśwież
-              </Button>
-            </Flex>
-          </TableCaption>
-          <Thead>
-            <Stack direction={['column', 'row']} spacing="24px" m={5}>
-              <Flex flexDir={'column'}>
-                <Text>Data od:</Text>
-                <DatePicker
-                  selected={startDate}
-                  onChange={date => setStartDate(date)}
-                  customInput={<CustomInput />}
-                  dateFormat="dd/MM/yyyy"
-                />{' '}
+    <>
+      <Center>
+        <BillAddModal
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          categories={categories}
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
+        <TableContainer w={'100%'}>
+          <Table variant={'simple'}>
+            <TableCaption>
+              <Flex>
+                <Button onClick={onOpen}>Dodaj Nowy Rachunek</Button>
+                <Button
+                  ml={2}
+                  onClick={() => {
+                    QueryData();
+                  }}
+                >
+                  Odśwież
+                </Button>
               </Flex>
-              <Flex flexDir={'column'}>
-                <Text>Data do:</Text>
-                <DatePicker
-                  selected={endDate}
-                  onChange={date => setEndDate(date)}
-                  customInput={<CustomInput />}
-                  dateFormat="dd/MM/yyyy"
-                />{' '}
-              </Flex>
-              <Flex flexDir={'column'} w={'200px'}>
-                <Text>Kategoria</Text>
-                <Select ref={categoryRef}>
-                  <option value="ALL">Wszystkie</option>
-                  {categories?.map(category => (
-                    <option value={category.id}>{category.name}</option>
-                  ))}
-                </Select>
-              </Flex>
-              <Flex flexDir={'column'} w={'200px'}>
-                <Text>Kwota od</Text>
-                <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    color="gray.300"
-                    fontSize="1.2em"
-                    children="$"
-                  />
-                  <Input ref={amountFromRef} />
-                </InputGroup>
-              </Flex>
-              <Flex flexDir={'column'} w={'200px'}>
-                <Text>Kwota do</Text>
-                <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    color="gray.300"
-                    fontSize="1.2em"
-                    children="$"
-                  />
-                  <Input ref={amountToRef} />
-                </InputGroup>
-              </Flex>
-            </Stack>
-            <Tr>
-              <Th>Nazwa Rachunki</Th>
-              <Th isNumeric>Kwota</Th>
-              <Th>Kategoria</Th>
-              <Th>Data Dodania</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {bills?.map(bill => (
+            </TableCaption>
+            <Thead>
+              <Stack direction={['column', 'row']} spacing="24px" m={5}>
+                <Flex flexDir={'column'}>
+                  <Text>Data od:</Text>
+                  <DatePicker
+                    selected={startDate}
+                    onChange={date => setStartDate(date)}
+                    customInput={<CustomInput />}
+                    dateFormat="dd/MM/yyyy"
+                  />{' '}
+                </Flex>
+                <Flex flexDir={'column'}>
+                  <Text>Data do:</Text>
+                  <DatePicker
+                    selected={endDate}
+                    onChange={date => setEndDate(date)}
+                    customInput={<CustomInput />}
+                    dateFormat="dd/MM/yyyy"
+                  />{' '}
+                </Flex>
+                <Flex flexDir={'column'} w={'200px'}>
+                  <Text>Kategoria</Text>
+                  <Select ref={categoryRef}>
+                    <option value="ALL">Wszystkie</option>
+                    {categories?.map(category => (
+                      <option value={category.id}>{category.name}</option>
+                    ))}
+                  </Select>
+                </Flex>
+                <Flex flexDir={'column'} w={'200px'}>
+                  <Text>Kwota od</Text>
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      color="gray.300"
+                      fontSize="1.2em"
+                      children="$"
+                    />
+                    <Input ref={amountFromRef} />
+                  </InputGroup>
+                </Flex>
+                <Flex flexDir={'column'} w={'200px'}>
+                  <Text>Kwota do</Text>
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      color="gray.300"
+                      fontSize="1.2em"
+                      children="$"
+                    />
+                    <Input ref={amountToRef} />
+                  </InputGroup>
+                </Flex>
+              </Stack>
               <Tr>
-                <Td>{bill.title}</Td>
-                <Td></Td>
-                <Td>
-                  {' '}
-                  <Flex flexDir={'row'}>
-                    {handleAmount(bill.amount)}
-                    {handleIcon(bill)}
-                  </Flex>
-                </Td>
-                <Td>{bill.category.name}</Td>
-                <Td>{dayjs(bill.CreatedDate).format('DD/MM/YYYY')}</Td>
-                <Td fontSize={'20px'}>
-                  <Flex>
-                    <Text
-                      m={1}
-                      fontSize={'24px'}
-                      cursor="pointer"
-                      _hover={{
-                        color: 'green.400',
-                      }}
-                    >
-                      <RiPencilLine />
-                    </Text>
-                    <Text
-                      m={1}
-                      cursor="pointer"
-                      fontSize={'24px'}
-                      _hover={{
-                        color: 'green.400',
-                      }}
-                    >
-                      <RiDeleteBinLine />
-                    </Text>
-                  </Flex>
-                </Td>
+                <Th>Nazwa Rachunki</Th>
+                <Th isNumeric>Kwota</Th>
+                <Th>Kategoria</Th>
+                <Th>Data Dodania</Th>
+                <Th></Th>
               </Tr>
-            ))}
-          </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>Nazwa Rachunki</Th>
-              <Th isNumeric>Kwota</Th>
-              <Th>Kategoria</Th>
-              <Th>Data Dodania</Th>
-              <Th></Th>
-            </Tr>
-          </Tfoot>
-        </Table>
-      </TableContainer>
-    </Center>
+            </Thead>
+            <Tbody>
+              {bills?.map(bill => (
+                <Tr>
+                  <Td>{bill.title}</Td>
+                  <Td>
+                    {' '}
+                    <Flex flexDir={'row'}>
+                      {handleAmount(bill.amount)}
+                      {handleIcon(bill)}
+                    </Flex>
+                  </Td>
+                  <Td>{bill.category.name}</Td>
+                  <Td>{dayjs(bill.CreatedDate).format('DD/MM/YYYY')}</Td>
+                  <Td fontSize={'20px'}>
+                    <Flex>
+                      <Text
+                        m={1}
+                        fontSize={'24px'}
+                        cursor="pointer"
+                        _hover={{
+                          color: 'green.400',
+                        }}
+                      >
+                        <RiPencilLine />
+                      </Text>
+                      <Text
+                        m={1}
+                        cursor="pointer"
+                        fontSize={'24px'}
+                        _hover={{
+                          color: 'green.400',
+                        }}
+                      >
+                        <BillDeleteModal
+                          user={user}
+                          setRefresh={setRefresh}
+                          id={bill.id}
+                        ></BillDeleteModal>
+                      </Text>
+                    </Flex>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+            <Tfoot>
+              <Tr>
+                <Th>Nazwa Rachunki</Th>
+                <Th isNumeric>Kwota</Th>
+                <Th>Kategoria</Th>
+                <Th>Data Dodania</Th>
+                <Th></Th>
+              </Tr>
+            </Tfoot>
+          </Table>
+        </TableContainer>
+      </Center>
+    </>
+  );
+}
+export function BillDeleteModal({ user, setRefresh, id }) {
+  const toast = useToast();
+
+  const handleDelete = () => {
+    axios
+      .delete(Apischema.bills + '/' + id, {
+        headers: { Authorization: 'bearer ' + user.Token },
+      })
+      .then(res => {
+        console.log(res);
+        toast({
+          title: 'Raachunek został usunięty 👍🏻',
+          description: 'Żegnaj rachunku! 👋🏻👋🏻',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+        });
+        setRefresh(refreshtToken => refreshtToken + 1);
+        onClose();
+      })
+      .catch(err => {
+        console.log(err);
+        toast({
+          title: '❗️ Wystąpił błąd! ❗️',
+          description: err.response.data.errors[0],
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        });
+      });
+  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
+  return (
+    <>
+      <RiDeleteBinLine onClick={onOpen} />
+
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Usuwanie rachunku
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Jesteś pewien? Tej akcji nie można cofnąć!
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Anuluj
+              </Button>
+              <Button colorScheme="red" onClick={handleDelete} ml={3}>
+                Usuń rachunek
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
   );
 }
 
@@ -297,8 +378,8 @@ export function BillAddModal({
       .then(res => {
         console.log(res);
         toast({
-          title: 'Dodano rachunek!',
-          description: 'Nowy rachunek został dodany.',
+          title: 'Dodano rachunek! 🛴',
+          description: 'Nowy rachunek został dodany. ❤️‍🔥',
           status: 'success',
           duration: 2000,
           isClosable: true,
