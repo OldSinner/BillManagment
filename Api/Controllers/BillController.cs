@@ -37,7 +37,6 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBills(DateTime from, DateTime to, string category, float fromAmount, float toAmount)
         {
-            Console.WriteLine(category);
             var response = await _billService.GetUserBills(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, from, to, category, fromAmount, toAmount);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }

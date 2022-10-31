@@ -13,12 +13,14 @@ namespace Api.Services
         private readonly Context _context;
         private readonly IConfiguration _config;
         private readonly IJWTAuth _auth;
+        private readonly ILogger<AuthService> logger;
 
-        public AuthService(Context context, IConfiguration config, IJWTAuth auth)
+        public AuthService(Context context, IConfiguration config, IJWTAuth auth, ILogger<AuthService> logger)
         {
             _context = context;
             _config = config;
             _auth = auth;
+            this.logger = logger;
         }
 
         public async Task<ServiceResponse<LoginResponse>> LoginUser(LoginDto dto)
@@ -38,12 +40,15 @@ namespace Api.Services
                 PasswordHasher(dto.password, out byte[] hashedReqPassword);
 
                 if (!VerifyPassword(user.Password, hashedReqPassword))
+                {
+                    logger.LogWarning("User {0} tried to login with wrong password", user.Email);
                     return new ServiceResponse<LoginResponse>()
                     {
                         IsSuccess = false,
                         Data = null,
                         Errors = new List<string>() { "Wrong Password" }
                     };
+                }
 
                 // Jeśli po drodze wykonywannia kodu, nie doszło do błędu, zwaracane są podstawowe informacje o uzytkowniku wraz z wygenerowanym
                 // dlaniego tokenem
@@ -62,6 +67,7 @@ namespace Api.Services
             // Jeśli wystąpił błąd wewnetrzny lub błąd na poziomie z komunikacjami z bazą dabnych, zwracamy wiadomość błędu
             catch (Exception ex)
             {
+                logger.LogError(ex, "Error while login user");
                 return new ServiceResponse<LoginResponse>()
                 {
                     IsSuccess = false,
@@ -84,7 +90,7 @@ namespace Api.Services
                     Errors = new List<string> { "Hasło ma za mało znaków" }
                 };
             }
-            
+
             var user = await _context.Users.Where(x => x.Email.ToUpper() == dto.Email.ToUpper()).FirstOrDefaultAsync();
 
             if (user != null)
@@ -144,6 +150,7 @@ namespace Api.Services
             };
 
             //Dodawanie użytkownika do bazy danych i zapisanie zmian
+            logger.LogInformation("Adding new user {0} to database", usr.Email);
             _context.Users.Add(usr);
             await _context.SaveChangesAsync();
             return new ServiceResponse<int>()

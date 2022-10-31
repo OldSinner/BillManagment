@@ -9,10 +9,12 @@ namespace Api.Services
     public class BillService : IBillService
     {
         private readonly Context _context;
+        private ILogger<BillService> logger;
 
-        public BillService(Context context)
+        public BillService(Context context, ILogger<BillService> logger)
         {
             _context = context;
+            this.logger = logger;
         }
         public async Task<ServiceResponse<BillResponse>> AddBill(BillDto bill, string userId)
         {
@@ -82,6 +84,7 @@ namespace Api.Services
                     Title = bill.Title
                 };
 
+                logger.LogInformation("Adding bill {0} for user {1}", billToAdd.Title, user.Email);
                 _context.Bill.Add(billToAdd);
                 await _context.SaveChangesAsync();
 
@@ -95,6 +98,7 @@ namespace Api.Services
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Error while adding bill");
                 return new ServiceResponse<BillResponse>()
                 {
                     IsSuccess = false,
@@ -152,6 +156,7 @@ namespace Api.Services
                     };
                 }
 
+                logger.LogInformation("Deleting bill {0} for user {1}", bill.Title, user.Email);
                 _context.Bill.Remove(bill);
                 await _context.SaveChangesAsync();
 
@@ -164,6 +169,7 @@ namespace Api.Services
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Error while deleting bill");
                 return new ServiceResponse<int>()
                 {
                     IsSuccess = false,
@@ -321,6 +327,8 @@ namespace Api.Services
                 bill.Category = category;
 
                 _context.Bill.Update(bill);
+
+                logger.LogInformation("Updating bill {0} for user {1}", bill.Title, user.Email);
                 await _context.SaveChangesAsync();
 
                 return new ServiceResponse<BillResponse>()
@@ -332,6 +340,7 @@ namespace Api.Services
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Error while updating bill");
                 return new ServiceResponse<BillResponse>()
                 {
                     IsSuccess = false,
