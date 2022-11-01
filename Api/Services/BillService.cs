@@ -325,10 +325,11 @@ namespace Api.Services
                 bill.Amount = (float)Math.Round(dto.Amount, 2);
                 bill.LastModified = DateTime.Now;
                 bill.Category = category;
+                bill.CreatedDate = dto.Date;
 
                 _context.Bill.Update(bill);
 
-                logger.LogInformation("Updating bill {0} for user {1}", bill.Title, user.Email);
+                logger.LogInformation("Updating bill {0} for user {1}", bill.Id, user.Email);
                 await _context.SaveChangesAsync();
 
                 return new ServiceResponse<BillResponse>()

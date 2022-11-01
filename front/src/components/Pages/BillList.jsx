@@ -175,7 +175,9 @@ export default function BillList() {
                   <Select ref={categoryRef}>
                     <option value="ALL">Wszystkie</option>
                     {categories?.map(category => (
-                      <option value={category.id}>{category.name}</option>
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
                     ))}
                   </Select>
                 </Flex>
@@ -206,7 +208,7 @@ export default function BillList() {
               </Stack>
               <Tr>
                 <Th>Nazwa Rachunki</Th>
-                <Th isNumeric>Kwota</Th>
+                <Th>Kwota</Th>
                 <Th>Kategoria</Th>
                 <Th>Data Dodania</Th>
                 <Th></Th>
@@ -214,7 +216,7 @@ export default function BillList() {
             </Thead>
             <Tbody>
               {bills?.map(bill => (
-                <Tr>
+                <Tr key={bill.id}>
                   <Td>{bill.title}</Td>
                   <Td>
                     {' '}
@@ -224,7 +226,7 @@ export default function BillList() {
                     </Flex>
                   </Td>
                   <Td>{bill.category.name}</Td>
-                  <Td>{dayjs(bill.CreatedDate).format('DD/MM/YYYY')}</Td>
+                  <Td>{dayjs(bill.createdDate).format('DD/MM/YYYY')}</Td>
                   <Td fontSize={'20px'}>
                     <Flex>
                       <Text
@@ -235,7 +237,11 @@ export default function BillList() {
                           color: 'green.400',
                         }}
                       >
-                        <RiPencilLine />
+                        <BillEditModal
+                          categories={categories}
+                          setRefresh={setRefresh}
+                          bill={bill}
+                        />
                       </Text>
                       <Text
                         m={1}
@@ -259,7 +265,7 @@ export default function BillList() {
             <Tfoot>
               <Tr>
                 <Th>Nazwa Rachunki</Th>
-                <Th isNumeric>Kwota</Th>
+                <Th>Kwota</Th>
                 <Th>Kategoria</Th>
                 <Th>Data Dodania</Th>
                 <Th></Th>
@@ -280,7 +286,6 @@ export function BillDeleteModal({ user, setRefresh, id }) {
         headers: { Authorization: 'bearer ' + user.Token },
       })
       .then(res => {
-        console.log(res);
         toast({
           title: 'Raachunek został usunięty 👍🏻',
           description: 'Żegnaj rachunku! 👋🏻👋🏻',
@@ -292,7 +297,6 @@ export function BillDeleteModal({ user, setRefresh, id }) {
         onClose();
       })
       .catch(err => {
-        console.log(err);
         toast({
           title: '❗️ Wystąpił błąd! ❗️',
           description: err.response.data.errors[0],
@@ -353,12 +357,14 @@ export function BillAddModal({
   var user = GetUser();
   const toast = useToast();
   const handleAmount = val => {
+    console.log(val);
     if (val < 0) {
       return val * -1;
     }
     if (incomeRef.current.value === 'outcome') {
       return val * -1;
     }
+    return val;
   };
 
   const HandleSubmit = () => {
@@ -376,7 +382,6 @@ export function BillAddModal({
         }
       )
       .then(res => {
-        console.log(res);
         toast({
           title: 'Dodano rachunek! 🛴',
           description: 'Nowy rachunek został dodany. ❤️‍🔥',
@@ -388,7 +393,6 @@ export function BillAddModal({
         onClose();
       })
       .catch(err => {
-        console.log(err);
         toast({
           title: 'Wystąpił błąd!',
           description: err.response.data.errors[0],
@@ -408,7 +412,7 @@ export function BillAddModal({
           <Text>Nazwa rachunku</Text>
           <Input ref={nameRef}></Input>
           <Text>Kwota</Text>
-          <Input isNumeric ref={amountRef}></Input>
+          <Input ref={amountRef}></Input>
           <Text>Data</Text>
           <DatePicker
             selected={date}
@@ -419,7 +423,9 @@ export function BillAddModal({
           <Text>Kategoria</Text>
           <Select ref={categoryRef}>
             {categories?.map(category => (
-              <option value={category.id}>{category.name}</option>
+              <option defaultValue key={category.id} value={category.id}>
+                {category.name}
+              </option>
             ))}
           </Select>
           <Text>Typ rachunku</Text>
@@ -447,5 +453,125 @@ export function BillAddModal({
         </ModalFooter>
       </ModalContent>
     </Modal>
+  );
+}
+export function BillEditModal({ categories, setRefresh, bill }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [date, setDate] = useState(new Date(bill.createdDate));
+  const amountRef = useRef();
+  const nameRef = useRef();
+  const categoryRef = useRef();
+  const incomeRef = useRef();
+  var user = GetUser();
+  const toast = useToast();
+
+  const handleAmount = val => {
+    if (val < 0) {
+      return val * -1;
+    }
+    if (incomeRef?.current?.value === 'outcome') {
+      return val * -1;
+    }
+    return val;
+  };
+
+  const HandleSubmit = () => {
+    console.log(dayjs(date).format('YYYY-MM-DD'));
+    axios
+      .put(
+        Apischema.bills,
+        {
+          Id: bill.id,
+          Title: nameRef.current.value,
+          Amount: handleAmount(amountRef.current.value),
+          CategoryId: categoryRef.current.value,
+          Date: dayjs(date).format('YYYY-MM-DD'),
+        },
+        {
+          headers: { Authorization: 'bearer ' + user.Token },
+        }
+      )
+      .then(res => {
+        toast({
+          title: 'Zedytowano Rachunek! 🛴',
+          description: 'Nowy rachunek już jest u nas!. ❤️‍🔥',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+        });
+        setRefresh(refreshtToken => refreshtToken + 1);
+        onClose();
+      })
+      .catch(err => {
+        toast({
+          title: 'Wystąpił błąd!',
+          description: err.response.data.errors[0],
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        });
+      });
+  };
+  return (
+    <>
+      <RiPencilLine onClick={onOpen} />
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edytuj Rachunek</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Nazwa rachunku</Text>
+            <Input ref={nameRef} defaultValue={bill.title}></Input>
+            <Text>Kwota</Text>
+            <Input
+              ref={amountRef}
+              defaultValue={handleAmount(bill.amount)}
+            ></Input>
+            <Text>Data</Text>
+            <DatePicker
+              selected={date}
+              onChange={date => {
+                console.log(date);
+                setDate(date);
+              }}
+              customInput={<CustomInput />}
+              dateFormat="dd/MM/yyyy"
+            />{' '}
+            <Text>Kategoria</Text>
+            <Select ref={categoryRef} defaultValue={bill.category.id}>
+              {categories?.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </Select>
+            <Text>Typ rachunku</Text>
+            <Select
+              ref={incomeRef}
+              defaultValue={bill.amount < 0 ? 'outcome' : 'income'}
+            >
+              <option value={'outcome'}>Wydatek</option>
+              <option value={'income'}>Przychód</option>
+            </Select>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="green"
+              mr={3}
+              onClick={() => {
+                HandleSubmit();
+              }}
+            >
+              Edytuj
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Anuluj
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
