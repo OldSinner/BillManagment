@@ -59,10 +59,7 @@ const handleAmount = amount => {
   }
   return <Text color="green.500">{amount}</Text>;
 };
-const handleIcon = bill => {
-  if (bill.Amount < 0) return <RiArrowDownSLine></RiArrowDownSLine>;
-  return <RiArrowUpSLine></RiArrowUpSLine>;
-};
+
 const changeToDot = value => {
   return value.replace(',', '.');
 };
@@ -220,10 +217,7 @@ export default function BillList() {
                   <Td>{bill.title}</Td>
                   <Td>
                     {' '}
-                    <Flex flexDir={'row'}>
-                      {handleAmount(bill.amount)}
-                      {handleIcon(bill)}
-                    </Flex>
+                    <Flex flexDir={'row'}>{handleAmount(bill.amount)}</Flex>
                   </Td>
                   <Td>{bill.category.name}</Td>
                   <Td>{dayjs(bill.createdDate).format('DD/MM/YYYY')}</Td>

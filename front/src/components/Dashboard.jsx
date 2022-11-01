@@ -11,9 +11,25 @@ import Card from './Card';
 import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from '@chakra-ui/react';
+import { Apischema } from './ApiSchema';
+import axios from 'axios';
+import { GetUser } from '../Utils/Auth';
 
 const state = {
-  labels: ['Maks', 'Umie', 'Grać', 'W', 'Reacta', 'Umie'],
+  labels: [
+    'Styczeń',
+    'Luty',
+    'Marzec',
+    'Kwiecień',
+    'Maj',
+    'Czerwiec',
+    'Lipiec',
+    'Sierpień',
+    'Wrzesień',
+    'Październik',
+    'Listopad',
+    'Grudzień',
+  ],
   datasets: [
     {
       label: 'Rainfall',
@@ -43,11 +59,44 @@ const state = {
       options: {
         maintainAspectRatio: false,
       },
-      data: [68, 45, 25, 58, 44, 52],
+      data: [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ],
     },
   ],
 };
 export function Dashboard() {
+  var user = GetUser();
+  const [summary, setSummary] = useState();
+
+  const QuerySummaryData = () => {
+    axios
+      .get(Apischema.summary, {
+        headers: { Authorization: 'bearer ' + user.Token },
+      })
+      .then(res => {
+        console.log(res.data.data);
+        for (let i = 1; i < 13; i++) {
+          state.datasets[0].data[i - 1] = res.data.data.monthly[i];
+        }
+        setSummary(res.data.data);
+      });
+  };
+
+  useEffect(() => {
+    QuerySummaryData();
+  }, []);
   const [isLargerThan960] = useMediaQuery('(min-width: 960px)');
   return (
     <Flex flexDir={'column'} alignItems="center">
@@ -72,7 +121,7 @@ export function Dashboard() {
               w="400px"
               h={'100px'}
               Color={'blue.400'}
-              Title={'1290,00 PLN'}
+              Title={summary?.balance.toFixed(2) + ' PLN'}
               Content={
                 <Text textAlign={'left'} color="gray.300">
                   Stan konta
@@ -83,7 +132,7 @@ export function Dashboard() {
               w="400px"
               h={'100px'}
               Color={'green.400'}
-              Title={'+321,00 PLN'}
+              Title={summary?.income.toFixed(2) + ' PLN'}
               Content={
                 <Text textAlign={'left'} color="gray.300">
                   Przychody
@@ -94,7 +143,7 @@ export function Dashboard() {
               w="400px"
               h={'100px'}
               Color={'red.400'}
-              Title={'-200,00 PLN'}
+              Title={summary?.outcome.toFixed(2) + ' PLN'}
               Content={
                 <Text textAlign={'left'} color="gray.300">
                   Wydatki
@@ -105,7 +154,7 @@ export function Dashboard() {
               w="400px"
               h={'100px'}
               Color={'yellow.400'}
-              Title={'+321,00'}
+              Title={(summary?.income + summary?.outcome).toFixed(2) + ' PLN'}
               Content={
                 <Text textAlign={'left'} color="gray.300">
                   Przepływ

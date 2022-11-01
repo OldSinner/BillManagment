@@ -3,6 +3,6 @@ export const Apischema = {
   register: baseApi + '/auth/register',
   login: baseApi + '/auth/login',
   bills: baseApi + '/bill',
-  summary: baseApi + '/statistic/summary',
+  summary: baseApi + '/statistic/dashboard',
   category: baseApi + '/category',
 };

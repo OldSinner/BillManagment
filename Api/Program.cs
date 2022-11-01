@@ -35,11 +35,7 @@ try
            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
        }));
     //Cors 
-    builder.Services.AddScoped<IJWTAuth, JWTAuth>();
-    builder.Services.AddScoped<IAuthService, AuthService>();
-    builder.Services.AddScoped<IBillService, BillService>();
-    builder.Services.AddScoped<ICategoryService, CategoryService>();
-    builder.Services.AddScoped<IStatisticService, StatisticService>();
+    builder.Services.AddCustomServices();
     builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
     {
         options.SuppressModelStateInvalidFilter = true;
