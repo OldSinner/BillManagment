@@ -59,20 +59,7 @@ const state = {
       options: {
         maintainAspectRatio: false,
       },
-      data: [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-      ],
+      data: [],
     },
   ],
 };
@@ -86,9 +73,8 @@ export function Dashboard() {
         headers: { Authorization: 'bearer ' + user.Token },
       })
       .then(res => {
-        console.log(res.data.data);
         for (let i = 1; i < 13; i++) {
-          state.datasets[0].data[i - 1] = res.data.data.monthly[i];
+          state.datasets[0].data[i - 1] = res.data.data.monthly[i] ?? 0;
         }
         setSummary(res.data.data);
       });
@@ -102,7 +88,7 @@ export function Dashboard() {
     <Flex flexDir={'column'} alignItems="center">
       <Box w={'100%'} h="auto">
         <Card
-          Title={'Wykres Stanu Konta'}
+          Title={'Wykres Przepływu pieniędzy'}
           Content={<MoneyChart />}
           Color={useColorModeValue('blue.300', 'blue.300')}
           w={'90%'}
