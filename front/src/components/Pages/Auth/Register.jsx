@@ -30,9 +30,9 @@ export default function Register() {
   const toast = useToast();
   var navigate = useNavigate();
 
-  useEffect(() => {
-    if (IsLogged) navigate('/dash');
-  }, []);
+  // useEffect(() => {
+  //   if (IsLogged) navigate('/dash');
+  // }, []);
 
   const handleSubmit = () => {
     setIsLoading(true);

@@ -11,7 +11,7 @@ namespace Api.Services
         private readonly Context _context;
         public CategoryService(Context context)
         {
-            _context = context;
+            _context = context; 
 
         }
         public async Task<ServiceResponse<List<CategoryResponse>>> GetUserCategory(string userId)

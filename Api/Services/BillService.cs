@@ -72,6 +72,16 @@ namespace Api.Services
                     };
                 }
 
+                if (float.IsInfinity(bill.Amount) || float.IsNegativeInfinity(bill.Amount))
+                {
+                    return new ServiceResponse<BillResponse>()
+                    {
+                        IsSuccess = false,
+                        Data = null,
+                        Errors = new List<string>() { "Podana wartośc jest nieprawidłowa" }
+                    };
+                }
+
 
                 var billToAdd = new Bill()
                 {

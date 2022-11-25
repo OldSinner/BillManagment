@@ -96,7 +96,7 @@ export function Dashboard() {
         />
       </Box>
       <Box w="90%">
-        <Box w="50%">
+        <Box w={['90%', '50%']}>
           <SimpleGrid
             width="50%"
             columns={[1, null, 2]}
