@@ -161,6 +161,42 @@ namespace Api.Services
             };
         }
 
+        public async Task<ServiceResponse> ChangePassword(string email, string oldPassword, string newPassword)
+        {
+            var user = await _context.Users.Where(x => x.Email.ToUpper() == email.ToUpper()).FirstOrDefaultAsync();
+
+            if (user == null)
+                return new ServiceResponse()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string>() { "Wrong Email" }
+                };
+
+            PasswordHasher(oldPassword, out byte[] hashedReqPassword);
+
+            if (!VerifyPassword(user.Password, hashedReqPassword))
+            {
+                logger.LogWarning("User {0} tried to change password with wrong password", user.Email);
+                return new ServiceResponse()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string>() { "Wrong Password" }
+                };
+            }
+
+            PasswordHasher(newPassword, out byte[] hashedNewPassword);
+            user.Password = hashedNewPassword;
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            return new ServiceResponse()
+            {
+                IsSuccess = true,
+                Errors = null
+            };
+        }
+
 
         private void PasswordHasher(string password, out byte[] hash)
         {
