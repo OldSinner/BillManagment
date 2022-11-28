@@ -30,28 +30,6 @@ function App() {
             element={
               <Layout>
                 <Dashboard />
-                {/* <Card
-                  Title={'1800 PLN'}
-                  Content={<Text
-          textAlign={'left'}
-          color={useColorModeValue('gray.700', 'gray.400')}
-          px={0}
-        >
-          Bieżące Saldo
-        </Text>}
-                  
-                  Color={useColorModeValue('blue.300', 'blue.300')}
-                />
-                <Card
-                  Title={'+800 PLN'}
-                  Content={'Przychody'}
-                  Color={useColorModeValue('green.300', 'green.300')}
-                />
-                <Card
-                  Title={'-800 PLN'}
-                  Content={'Wydatki'}
-                  Color={useColorModeValue('red.300', 'red.300')}
-                /> */}
               </Layout>
             }
           ></Route>
@@ -63,6 +41,7 @@ function App() {
               </Layout>
             }
           ></Route>
+          <Route path="/settings" element={<Layout></Layout>}></Route>
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
