@@ -1,6 +1,9 @@
+using System.Security.Claims;
 using Api.Interfaces;
 using Api.Models;
+using Api.Models.Dtos.Auth;
 using Api.Models.Dtos.Login;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -45,6 +48,37 @@ namespace Api.Controllers
                 });
             }
             var response = await _authService.LoginUser(req);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [Authorize]
+        [HttpPost("password")]
+        public async Task<ActionResult> ChangePasswod(ChangePasswordDto req)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ServiceResponse<int>()
+                {
+                    IsSuccess = false,
+                    Data = 1,
+                    Errors = ModelState.Values.SelectMany(v => v.Errors).Select(x => x.ErrorMessage).ToList()
+                });
+            }
+            var response = await _authService.ChangePassword(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, req.OldPassword, req.NewPassword);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpPost("username")]
+        public async Task<ActionResult> ChangeUserName([FromBody] string NewUserName)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ServiceResponse<int>()
+                {
+                    IsSuccess = false,
+                    Data = 1,
+                    Errors = ModelState.Values.SelectMany(v => v.Errors).Select(x => x.ErrorMessage).ToList()
+                });
+            }
+            var response = await _authService.ChangeUserName(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, NewUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }

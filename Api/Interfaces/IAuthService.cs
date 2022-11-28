@@ -6,7 +6,9 @@ namespace Api.Interfaces
 {
     public interface IAuthService
     {
-        public Task<ServiceResponse<int>> RegisterUser(UserRegisterDto user);
-        public Task<ServiceResponse<LoginResponse>> LoginUser(LoginDto dto);
+        Task<ServiceResponse<int>> RegisterUser(UserRegisterDto user);
+        Task<ServiceResponse<LoginResponse>> LoginUser(LoginDto dto);
+        Task<ServiceResponse> ChangePassword(string id, string oldPassword, string newPassword);
+        Task<ServiceResponse> ChangeUserName(string id, string username);
     }
 }

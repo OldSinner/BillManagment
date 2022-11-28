@@ -5,6 +5,6 @@ namespace Api.Interfaces
 {
     public interface IJWTAuth
     {
-        public Task<string> GenerateJsonWebToken(User usr);
+         Task<string> GenerateJsonWebToken(User usr);
     }
 }

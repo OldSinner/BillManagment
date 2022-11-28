@@ -69,11 +69,11 @@ export default function Register() {
         isClosable: true,
       });
     }
-    if (password.current.value.length < 6) {
+    if (password.current.value.length < 8) {
       errorPassword = true;
       toast({
         title: 'Niepoprawne hasło.',
-        description: 'Hasło musi zawierać conajmniej 6 znaków.',
+        description: 'Hasło musi zawierać conajmniej 8 znaków.',
         status: 'error',
         duration: 2000,
         isClosable: true,

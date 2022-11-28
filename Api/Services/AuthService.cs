@@ -77,6 +77,58 @@ namespace Api.Services
             }
         }
 
+        public async Task<ServiceResponse> ChangeUserName(string id, string username)
+        {
+            try
+            {
+                Guid userGuid;
+                var parseSuccess = Guid.TryParse(id, out userGuid);
+                if (!parseSuccess)
+                {
+                    return new ServiceResponse<int>()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "UserId is not valid" }
+                    };
+                }
+
+                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+
+                if (user == null)
+                    return new ServiceResponse()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "User not found" }
+                    };
+
+                if (username.Length < 3 || username.Length > 20)
+                    return new ServiceResponse()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "Username must be between 3 and 20 characters" }
+                    };
+                user.FirstName = username;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                logger.LogInformation("User {0} changed username to {1}", user.Email, username);
+
+                return new ServiceResponse()
+                {
+                    IsSuccess = true,
+                    Errors = null
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error while changing username");
+                return new ServiceResponse()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string>() { ex.Message }
+                };
+            }
+        }
+
         public async Task<ServiceResponse<int>> RegisterUser(UserRegisterDto dto)
         {
             bool isError = false;
@@ -161,40 +213,77 @@ namespace Api.Services
             };
         }
 
-        public async Task<ServiceResponse> ChangePassword(string email, string oldPassword, string newPassword)
+        public async Task<ServiceResponse> ChangePassword(string id, string oldPassword, string newPassword)
         {
-            var user = await _context.Users.Where(x => x.Email.ToUpper() == email.ToUpper()).FirstOrDefaultAsync();
-
-            if (user == null)
-                return new ServiceResponse()
-                {
-                    IsSuccess = false,
-                    Errors = new List<string>() { "Wrong Email" }
-                };
-
-            PasswordHasher(oldPassword, out byte[] hashedReqPassword);
-
-            if (!VerifyPassword(user.Password, hashedReqPassword))
+            try
             {
-                logger.LogWarning("User {0} tried to change password with wrong password", user.Email);
+
+                if (newPassword.Length < 8 || newPassword.Length > 32)
+                    return new ServiceResponse()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "Password must be between 8 and 32 characters" }
+                    };
+                Guid userGuid;
+                var parseSuccess = Guid.TryParse(id, out userGuid);
+                if (!parseSuccess)
+                {
+                    return new ServiceResponse<int>()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "UserId is not valid" }
+                    };
+                }
+
+                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    return new ServiceResponse<int>()
+                    {
+                        IsSuccess = false,
+                        Data = 0,
+                        Errors = new List<string>() { "User not found" }
+                    };
+                }
+
+                PasswordHasher(oldPassword, out byte[] hashedReqPassword);
+
+                if (!VerifyPassword(user.Password, hashedReqPassword))
+                {
+                    logger.LogWarning("User {0} tried to change password with wrong password", user.Email);
+                    return new ServiceResponse()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "Wrong Password" }
+                    };
+                }
+
+                PasswordHasher(newPassword, out byte[] hashedNewPassword);
+                user.Password = hashedNewPassword;
+
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+
+                logger.LogInformation("User {0} changed password", user.Email);
+
                 return new ServiceResponse()
                 {
+                    IsSuccess = true,
+                    Errors = null
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error while changing password");
+                return new ServiceResponse<int>()
+                {
                     IsSuccess = false,
-                    Errors = new List<string>() { "Wrong Password" }
+                    Data = 0,
+                    Errors = new List<string>() { ex.Message
+    }
                 };
             }
 
-            PasswordHasher(newPassword, out byte[] hashedNewPassword);
-            user.Password = hashedNewPassword;
-
-            _context.Update(user);
-            await _context.SaveChangesAsync();
-
-            return new ServiceResponse()
-            {
-                IsSuccess = true,
-                Errors = null
-            };
         }
 
 

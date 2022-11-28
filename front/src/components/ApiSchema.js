@@ -6,4 +6,5 @@ export const Apischema = {
   summary: baseApi + '/statistic/dashboard',
   category: baseApi + '/category',
   changePassword: baseApi + '/auth/password',
+  changeUsername: baseApi + '/auth/username',
 };
