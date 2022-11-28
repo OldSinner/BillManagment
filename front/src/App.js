@@ -16,6 +16,7 @@ import BillList from './components/Pages/BillList';
 import Card from './components/Card';
 import { Dashboard } from './components/Dashboard';
 import { Chart, registerables } from 'chart.js';
+import Settings from './components/Pages/Settings';
 Chart.register(...registerables);
 function App() {
   return (
@@ -41,7 +42,14 @@ function App() {
               </Layout>
             }
           ></Route>
-          <Route path="/settings" element={<Layout></Layout>}></Route>
+          <Route
+            path="/settings"
+            element={
+              <Layout>
+                <Settings></Settings>
+              </Layout>
+            }
+          ></Route>
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

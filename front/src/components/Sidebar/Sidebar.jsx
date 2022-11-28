@@ -18,6 +18,7 @@ import {
   HiCurrencyDollar,
   HiOutlineHome,
   HiOutlineLogout,
+  HiOutlineCog,
 } from 'react-icons/hi';
 import { GetUser, LogOut } from '../../Utils/Auth';
 export function Sidebar({ isOpen, setIsOpen }) {
@@ -38,7 +39,7 @@ export function Sidebar({ isOpen, setIsOpen }) {
       justifyContent={'space-between'}
       transition="all 0.5s ease"
     >
-      <Flex flexDir={'column'} justifyContent="center">
+      <Flex flexDir={'column'} justifyContent="center" overflowX={'hidden'}>
         <Center
           fontSize={'40px'}
           color={'green.400'}
@@ -81,7 +82,12 @@ export function Sidebar({ isOpen, setIsOpen }) {
             isOpen={isOpen}
             icon={HiCurrencyDollar}
           />
-          <NavItem text={'Home'} isOpen={isOpen} />
+          <NavItem
+            text={'Ustawienia'}
+            link="/settings"
+            isOpen={isOpen}
+            icon={HiOutlineCog}
+          />
           <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
           <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
 
