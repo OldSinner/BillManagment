@@ -217,7 +217,6 @@ namespace Api.Services
         {
             try
             {
-
                 if (newPassword.Length < 8 || newPassword.Length > 32)
                     return new ServiceResponse()
                     {

@@ -82,13 +82,15 @@ export function Sidebar({ isOpen, setIsOpen }) {
             isOpen={isOpen}
             icon={HiCurrencyDollar}
           />
+          <NavItem text={'Raporty'} link="/raports"
+            icon={HiCurrencyDollar}
+            isOpen={isOpen} />
           <NavItem
             text={'Ustawienia'}
             link="/settings"
             isOpen={isOpen}
             icon={HiOutlineCog}
           />
-          <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
           <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
 
           <Divider w={isOpen ? '100%' : '75%'} transition="all 0.5s ease" />

@@ -24,5 +24,14 @@ namespace Api.Controllers
             var response = await _statisticService.GetDashboard(userId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+
+        [Authorize]
+        [HttpGet("pdf")]
+        public async Task<IActionResult> GetPdf(DateTime from, DateTime to)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var response = await _statisticService.GetPdfStats(userId, from, to);
+            return response.IsSuccess ? File(response.Data, "application/octet-stream", "Stats.pdf") : BadRequest(response);
+        }
     }
 }

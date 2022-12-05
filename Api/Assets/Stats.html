@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Raport</title>
+    <style>
+      body {
+        align-items: center;
+        flex-direction: column;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+      .UserNick {
+        margin-top: 2vh;
+        display: flex;
+        font-size: 2.5vh;
+      }
+      .RaportDate {
+        margin-top: 1vh;
+        font-size: 2vh;
+        display: flex;
+      }
+      .RaportInternalData {
+        width: 80vw;
+        height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: row;
+      }
+      table {
+        font-size: 1.75vh;
+        margin-top: 5vh;
+        width: 100%;
+        border: 1px solid;
+        border-collapse: collapse;
+        text-align: center;
+      }
+      tr,
+      td,
+      th {
+        border: 1px solid;
+      }
+      th {
+        font-size: 2vh;
+      }
+      th:first-child {
+        width: 20%;
+      }
+      th:nth-child(2) {
+        width: 60%;
+      }
+      th:last-child {
+        width: 20%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="UserNick">Raport dla użytkownika {{Nick}}</h1>
+    <h2 class="RaportDate">Raport z dni od {{dateStart}} do {{dateEnd}}</h2>
+    <div class="RaportInternalData">
+      <table class="RaportTable">
+        <tr class="RaportFirstRow">
+          <th>Numer porządkowy</th>
+          <th>Nazwa kategorii</th>
+          <th>Kwota</th>
+        </tr>
+        {{tableContent}}
+      </table>
+    </div>
+  </body>
+</html>

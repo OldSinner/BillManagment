@@ -17,6 +17,7 @@ import Card from './components/Card';
 import { Dashboard } from './components/Dashboard';
 import { Chart, registerables } from 'chart.js';
 import Settings from './components/Pages/Settings';
+import Raports from './components/Pages/Raports';
 Chart.register(...registerables);
 function App() {
   return (
@@ -47,6 +48,14 @@ function App() {
             element={
               <Layout>
                 <Settings></Settings>
+              </Layout>
+            }
+          ></Route>
+          <Route
+            path="/raports"
+            element={
+              <Layout>
+                <Raports></Raports>
               </Layout>
             }
           ></Route>
