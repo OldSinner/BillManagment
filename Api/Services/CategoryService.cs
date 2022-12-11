@@ -11,7 +11,7 @@ namespace Api.Services
         private readonly Context _context;
         public CategoryService(Context context)
         {
-            _context = context; 
+            _context = context;
 
         }
         public async Task<ServiceResponse<List<CategoryResponse>>> GetUserCategory(string userId)
@@ -27,7 +27,7 @@ namespace Api.Services
                 };
             }
 
-            var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+            var user = await _context.Users!.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
             if (user == null)
             {
                 return new ServiceResponse<List<CategoryResponse>>()
@@ -38,7 +38,7 @@ namespace Api.Services
                 };
             }
 
-            var categories = await _context.Category.Where(x => x.Owner.Id == userGuid || x.Owner == null).ToListAsync();
+            var categories = await _context.Category!.Where(x => x.Owner!.Id == userGuid || x.Owner == null).ToListAsync();
             var categoryResponse = new List<CategoryResponse>();
 
             foreach (var category in categories)

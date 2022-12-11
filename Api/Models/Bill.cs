@@ -9,13 +9,13 @@ namespace Api.Models
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public User Owner { get; set; }
+        public User? Owner { get; set; } = new User();
         [Required]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         [Required]
         public float Amount { get; set; }
         [Required]
-        public Category Category { get; set; }
+        public Category Category { get; set; } = new Category();
         [Required]
         public DateTime CreatedDate { get; set; }
         [Required]

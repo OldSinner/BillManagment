@@ -9,8 +9,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../Assets/logo.png';
 import {
   HiArrowCircleLeft,

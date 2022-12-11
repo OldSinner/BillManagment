@@ -40,11 +40,11 @@ namespace Api.Services
                 }
 
                 var dashboard = new DashboardModel();
-                var expens = await _context.Bill.Where(b => b.Owner.Id == userGuid).Where(x => x.Amount < 0).SumAsync(x => x.Amount);
-                var income = await _context.Bill.Where(b => b.Owner.Id == userGuid).Where(x => x.Amount > 0).SumAsync(x => x.Amount);
-                var expensThisMonth = await _context.Bill.Where(b => b.Owner.Id == userGuid).Where(x => x.CreatedDate.Month == DateTime.Now.Month && x.CreatedDate.Year == DateTime.Now.Year).Where(x => x.Amount < 0).SumAsync(x => x.Amount);
-                var incomeThisMonth = await _context.Bill.Where(b => b.Owner.Id == userGuid).Where(x => x.CreatedDate.Month == DateTime.Now.Month && x.CreatedDate.Year == DateTime.Now.Year).Where(x => x.Amount > 0).SumAsync(x => x.Amount);
-                var stats = await _context.Bill.Where(b => b.Owner.Id == userGuid && b.CreatedDate.Year == DateTime.Now.Year).GroupBy(x => x.CreatedDate.Month).Select(x => new { Month = x.Key, Amount = x.Sum(y => y.Amount) }).ToListAsync();
+                var expens = await _context.Bill!.Where(b => b.Owner!.Id == userGuid).Where(x => x.Amount < 0).SumAsync(x => x.Amount);
+                var income = await _context.Bill!.Where(b => b.Owner!.Id == userGuid).Where(x => x.Amount > 0).SumAsync(x => x.Amount);
+                var expensThisMonth = await _context.Bill!.Where(b => b.Owner!.Id == userGuid).Where(x => x.CreatedDate.Month == DateTime.Now.Month && x.CreatedDate.Year == DateTime.Now.Year).Where(x => x.Amount < 0).SumAsync(x => x.Amount);
+                var incomeThisMonth = await _context.Bill!.Where(b => b.Owner!.Id == userGuid).Where(x => x.CreatedDate.Month == DateTime.Now.Month && x.CreatedDate.Year == DateTime.Now.Year).Where(x => x.Amount > 0).SumAsync(x => x.Amount);
+                var stats = await _context.Bill!.Where(b => b.Owner!.Id == userGuid && b.CreatedDate.Year == DateTime.Now.Year).GroupBy(x => x.CreatedDate.Month).Select(x => new { Month = x.Key, Amount = x.Sum(y => y.Amount) }).ToListAsync();
 
                 return new ServiceResponse<DashboardModel>()
                 {
@@ -82,7 +82,7 @@ namespace Api.Services
                         Errors = new List<string>() { "UserId is not valid" }
                     };
                 }
-                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                var user = await _context.Users!.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
                 if (user == null)
                 {
                     return new ServiceResponse<byte[]>()
@@ -109,7 +109,7 @@ namespace Api.Services
                 content = content.Replace("{{dateEnd}}", to.ToShortDateString());
 
                 string tableToBuild = string.Empty;
-                var billsNoPick = await _context.Bill.Where(b => b.Owner.Id == userGuid).Where(x => x.CreatedDate >= from && x.CreatedDate <= to).Include(x => x.Category).ToListAsync();
+                var billsNoPick = await _context.Bill!.Where(b => b.Owner!.Id == userGuid).Where(x => x.CreatedDate >= from && x.CreatedDate <= to).Include(x => x.Category).ToListAsync();
                 var bills = billsNoPick.GroupBy(x => x.Category).ToList();
                 foreach (var (bill, i) in bills.Select((bill, i) => (bill, i)))
                 {

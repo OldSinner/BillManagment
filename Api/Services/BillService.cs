@@ -50,7 +50,7 @@ namespace Api.Services
                         Errors = new List<string>() { "Title is required" }
                     };
                 }
-                var user = await _context.Users.Where(x => x.Id.ToString() == userId).FirstOrDefaultAsync();
+                var user = await _context.Users!.Where(x => x.Id.ToString() == userId).FirstOrDefaultAsync();
                 if (user == null)
                 {
                     return new ServiceResponse<BillResponse>()
@@ -61,7 +61,7 @@ namespace Api.Services
                     };
                 }
 
-                var category = await _context.Category.Where(x => x.Id.ToString() == bill.CategoryId).FirstOrDefaultAsync();
+                var category = await _context.Category!.Where(x => x.Id.ToString() == bill.CategoryId).FirstOrDefaultAsync();
                 if (category == null)
                 {
                     return new ServiceResponse<BillResponse>()
@@ -82,7 +82,6 @@ namespace Api.Services
                     };
                 }
 
-
                 var billToAdd = new Bill()
                 {
                     Id = Guid.NewGuid(),
@@ -95,7 +94,7 @@ namespace Api.Services
                 };
 
                 logger.LogInformation("Adding bill {0} for user {1}", billToAdd.Title, user.Email);
-                _context.Bill.Add(billToAdd);
+                _context.Bill!.Add(billToAdd);
                 await _context.SaveChangesAsync();
 
                 billToAdd.Owner = null;
@@ -144,7 +143,7 @@ namespace Api.Services
                     };
                 }
 
-                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                var user = await _context.Users!.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
                 if (user == null)
                 {
                     return new ServiceResponse<int>()
@@ -155,7 +154,7 @@ namespace Api.Services
                     };
                 }
 
-                var bill = await _context.Bill.Where(x => x.Id == billGuid).FirstOrDefaultAsync();
+                var bill = await _context.Bill!.Where(x => x.Id == billGuid).FirstOrDefaultAsync();
                 if (bill == null)
                 {
                     return new ServiceResponse<int>()
@@ -167,7 +166,7 @@ namespace Api.Services
                 }
 
                 logger.LogInformation("Deleting bill {0} for user {1}", bill.Title, user.Email);
-                _context.Bill.Remove(bill);
+                _context.Bill!.Remove(bill);
                 await _context.SaveChangesAsync();
 
                 return new ServiceResponse<int>()
@@ -214,7 +213,7 @@ namespace Api.Services
                     };
                 }
 
-                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                var user = await _context.Users!.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
                 if (user == null)
                 {
                     return new ServiceResponse<List<BillResponse>>()
@@ -224,7 +223,7 @@ namespace Api.Services
                         Errors = new List<string>() { "User not found" }
                     };
                 }
-                var bills = await _context.Bill.Where(x => x.Owner.Id == user.Id && Math.Abs(x.Amount) >= fromAmount && Math.Abs(x.Amount) >= toAmount && x.CreatedDate >= from && x.CreatedDate <= to).Include(x => x.Category).ToListAsync();
+                var bills = await _context.Bill!.Where(x => x.Owner!.Id == user.Id && Math.Abs(x.Amount) >= fromAmount && Math.Abs(x.Amount) >= toAmount && x.CreatedDate >= from && x.CreatedDate <= to).Include(x => x.Category).ToListAsync();
                 List<BillResponse> billResponses = new List<BillResponse>();
 
                 foreach (var bill in bills)
@@ -273,9 +272,9 @@ namespace Api.Services
                         IsSuccess = false,
                         Errors = new List<string>() { "UserId is not valid" }
                     };
-                };
+                }
 
-                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                var user = await _context.Users!.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
                 if (user == null)
                 {
                     return new ServiceResponse<BillResponse>()
@@ -295,9 +294,9 @@ namespace Api.Services
                         IsSuccess = false,
                         Errors = new List<string>() { "GuidId is not valid" }
                     };
-                };
+                }
 
-                var bill = await _context.Bill.Where(x => x.Id == billGuid).FirstOrDefaultAsync();
+                var bill = await _context.Bill!.Where(x => x.Id == billGuid).FirstOrDefaultAsync();
                 if (bill == null)
                 {
                     return new ServiceResponse<BillResponse>()
@@ -317,9 +316,9 @@ namespace Api.Services
                         IsSuccess = false,
                         Errors = new List<string>() { "CategoryId is not valid" }
                     };
-                };
+                }
 
-                var category = await _context.Category.Where(x => x.Id == categoryId).FirstOrDefaultAsync();
+                var category = await _context.Category!.Where(x => x.Id == categoryId).FirstOrDefaultAsync();
                 if (category == null)
                 {
                     return new ServiceResponse<BillResponse>()
@@ -330,14 +329,13 @@ namespace Api.Services
                     };
                 }
 
-
                 bill.Title = dto.Title;
                 bill.Amount = (float)Math.Round(dto.Amount, 2);
                 bill.LastModified = DateTime.Now;
                 bill.Category = category;
                 bill.CreatedDate = dto.Date;
 
-                _context.Bill.Update(bill);
+                _context.Bill!.Update(bill);
 
                 logger.LogInformation("Updating bill {0} for user {1}", bill.Id, user.Email);
                 await _context.SaveChangesAsync();

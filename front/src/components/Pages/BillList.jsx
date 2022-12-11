@@ -42,8 +42,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import {
   RiPencilLine,
   RiDeleteBinLine,
-  RiArrowDownSLine,
-  RiArrowUpSLine,
 } from 'react-icons/ri';
 import { GetUser } from '../../Utils/Auth';
 import { Apischema } from '../ApiSchema';
@@ -76,7 +74,6 @@ export default function BillList() {
   const [categories, setCategory] = useState();
   const [refresh, setRefresh] = useState(0);
   const [bills, setBills] = useState();
-  const [idtoDelete, setIdToDelete] = useState();
 
   const [startDate, setStartDate] = useState(
     new Date(dayjs().startOf('month').format('YYYY-MM-DD HH:mm:ss'))

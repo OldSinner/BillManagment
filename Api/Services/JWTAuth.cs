@@ -18,7 +18,7 @@ namespace API.Services
         }
 
 
-        public async Task<string> GenerateJsonWebToken(User usr)
+        public string GenerateJsonWebToken(User usr)
         {
             var claims = new List<Claim>() {
                 new Claim(ClaimTypes.Email, usr.Email),

@@ -27,7 +27,7 @@ namespace Api.Services
         {
             try
             {
-                var user = await _context.Users.Where(x => x.Email.ToUpper() == dto.email.ToUpper()).Include(x => x.Role).FirstOrDefaultAsync();
+                var user = await _context!.Users!.Where(x => x.Email.ToUpper() == dto.email.ToUpper()).Include(x => x.Role).FirstOrDefaultAsync();
 
                 if (user == null)
                     return new ServiceResponse<LoginResponse>()
@@ -39,7 +39,7 @@ namespace Api.Services
 
                 PasswordHasher(dto.password, out byte[] hashedReqPassword);
 
-                if (!VerifyPassword(user.Password, hashedReqPassword))
+                if (!VerifyPassword(user.Password!, hashedReqPassword))
                 {
                     logger.LogWarning("User {0} tried to login with wrong password", user.Email);
                     return new ServiceResponse<LoginResponse>()
@@ -58,7 +58,7 @@ namespace Api.Services
                     Errors = null,
                     Data = new LoginResponse()
                     {
-                        Token = await _auth.GenerateJsonWebToken(user),
+                        Token = _auth.GenerateJsonWebToken(user),
                         UserName = user.FirstName
                     }
                 };
@@ -92,7 +92,7 @@ namespace Api.Services
                     };
                 }
 
-                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                var user = await _context!.Users!.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
 
                 if (user == null)
                     return new ServiceResponse()
@@ -108,7 +108,7 @@ namespace Api.Services
                         Errors = new List<string>() { "Username must be between 3 and 20 characters" }
                     };
                 user.FirstName = username;
-                _context.Users.Update(user);
+                _context!.Users!.Update(user);
                 await _context.SaveChangesAsync();
                 logger.LogInformation("User {0} changed username to {1}", user.Email, username);
 
@@ -143,7 +143,7 @@ namespace Api.Services
                 };
             }
 
-            var user = await _context.Users.Where(x => x.Email.ToUpper() == dto.Email.ToUpper()).FirstOrDefaultAsync();
+            var user = await _context!.Users!.Where(x => x.Email.ToUpper() == dto.Email.ToUpper()).FirstOrDefaultAsync();
 
             if (user != null)
             {
@@ -175,7 +175,7 @@ namespace Api.Services
             PasswordHasher(dto.Password, out byte[] hashedPassword);
 
             //Znajdowana jest w bazie danych rola która została przekazana w DTO
-            var role = await _context.Role.Where(x => x.Name == "USER").FirstOrDefaultAsync();
+            var role = await _context!.Role!.Where(x => x.Name == "USER").FirstOrDefaultAsync();
 
             //Jesli nie odnaleziono roli, zwracany jest błąd
             if (role == null)
@@ -203,7 +203,7 @@ namespace Api.Services
 
             //Dodawanie użytkownika do bazy danych i zapisanie zmian
             logger.LogInformation("Adding new user {0} to database", usr.Email);
-            _context.Users.Add(usr);
+            _context.Users!.Add(usr);
             await _context.SaveChangesAsync();
             return new ServiceResponse<int>()
             {
@@ -234,7 +234,7 @@ namespace Api.Services
                     };
                 }
 
-                var user = await _context.Users.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                var user = await _context!.Users!.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
                 if (user == null)
                 {
                     return new ServiceResponse<int>()
@@ -247,7 +247,7 @@ namespace Api.Services
 
                 PasswordHasher(oldPassword, out byte[] hashedReqPassword);
 
-                if (!VerifyPassword(user.Password, hashedReqPassword))
+                if (!VerifyPassword(user.Password!, hashedReqPassword))
                 {
                     logger.LogWarning("User {0} tried to change password with wrong password", user.Email);
                     return new ServiceResponse()

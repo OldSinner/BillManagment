@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  ChakraProvider,
-  theme,
-  Text,
-  useColorMode,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { ChakraProvider, theme } from '@chakra-ui/react';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './components/Pages/MainPage';
@@ -13,7 +7,6 @@ import Register from './components/Pages/Auth/Register';
 import Login from './components/Pages/Auth/Login';
 import Layout from './components/Layout';
 import BillList from './components/Pages/BillList';
-import Card from './components/Card';
 import { Dashboard } from './components/Dashboard';
 import { Chart, registerables } from 'chart.js';
 import Settings from './components/Pages/Settings';

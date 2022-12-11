@@ -18,7 +18,8 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCategory()
         {
-            var response = await _categoryService.GetUserCategory(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var response = await _categoryService.GetUserCategory(userId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }

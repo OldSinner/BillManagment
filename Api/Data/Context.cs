@@ -6,11 +6,11 @@ namespace Api.Data
 {
     public class Context : DbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Role { get; set; }
-        public DbSet<Icon> Icon { get; set; }
-        public DbSet<Category> Category { get; set; }
-        public DbSet<Bill> Bill { get; set; }
+        public DbSet<User>? Users { get; set; }
+        public DbSet<Role>? Role { get; set; }
+        public DbSet<Icon>? Icon { get; set; }
+        public DbSet<Category>? Category { get; set; }
+        public DbSet<Bill>? Bill { get; set; }
         public Context(DbContextOptions<Context> opt) : base(opt)
         {
         }

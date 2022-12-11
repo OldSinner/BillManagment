@@ -63,7 +63,8 @@ namespace Api.Controllers
                     Errors = ModelState.Values.SelectMany(v => v.Errors).Select(x => x.ErrorMessage).ToList()
                 });
             }
-            var response = await _authService.ChangePassword(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, req.OldPassword, req.NewPassword);
+            var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var response = await _authService.ChangePassword(userId, req.OldPassword, req.NewPassword);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpPost("username")]
@@ -78,7 +79,8 @@ namespace Api.Controllers
                     Errors = ModelState.Values.SelectMany(v => v.Errors).Select(x => x.ErrorMessage).ToList()
                 });
             }
-            var response = await _authService.ChangeUserName(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, NewUserName);
+            var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var response = await _authService.ChangeUserName(userId, NewUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }

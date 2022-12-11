@@ -14,12 +14,11 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Apischema } from '../../ApiSchema';
 import axios from 'axios';
-import { IsLogged } from '../../../Utils/Auth';
 
 export default function Register() {
   const [invalidTable, setInvalidTable] = useState([false, false, false]);

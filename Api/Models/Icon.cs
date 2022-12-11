@@ -8,6 +8,6 @@ namespace Api.Models
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public string className { get; set; }
+        public string className { get; set; } = string.Empty;
     }
 }

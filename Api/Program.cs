@@ -88,6 +88,5 @@ public static class Program
         app.UseCors();
         app.Run();
         //End App
-
     }
 }
