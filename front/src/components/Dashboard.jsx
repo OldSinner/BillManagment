@@ -1,9 +1,7 @@
 import {
   Box,
-  Center,
   Flex,
   SimpleGrid,
-  Stack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -83,7 +81,6 @@ export function Dashboard() {
   useEffect(() => {
     QuerySummaryData();
   }, []);
-  const [isLargerThan960] = useMediaQuery('(min-width: 960px)');
   return (
     <Flex flexDir={'column'} alignItems="center">
       <Box w={'100%'} h="auto">
@@ -159,8 +156,7 @@ function MoneyChart() {
     if (window.innerWidth < 1000) return 300;
     else return 40;
   };
-  const [height, setHeight] = useState(DetermineSize());
-
+  const height = DetermineSize();
   return (
     <Line
       r

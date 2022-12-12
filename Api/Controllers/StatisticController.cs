@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text;
 using Api.Interfaces;
 using Api.Models.Dtos.Stats;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,14 @@ namespace Api.Controllers
             var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             var response = await _statisticService.GetPdfStats(userId, from, to);
             return response.IsSuccess ? File(response.Data!, "application/octet-stream", "Stats.pdf") : BadRequest(response);
+        }
+        [Authorize]
+        [HttpGet("csv")]
+        public async Task<IActionResult> GetCsv(DateTime from, DateTime to)
+        {
+            var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var response = await _statisticService.GetCsvFile(userId, from, to);
+            return response.IsSuccess ? File(Encoding.UTF8.GetBytes(response.Data!), "application/octet-stream", "Stats.csv") : BadRequest(response);
         }
     }
 }

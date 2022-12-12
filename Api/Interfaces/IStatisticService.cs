@@ -9,5 +9,6 @@ namespace Api.Interfaces
     {
         Task<ServiceResponse<DashboardModel>> GetDashboard(string userId);
         Task<ServiceResponse<byte[]>> GetPdfStats(string userId, DateTime from, DateTime to);
+        Task<ServiceResponse<string>> GetCsvFile(string userId, DateTime from, DateTime to);
     }
 }

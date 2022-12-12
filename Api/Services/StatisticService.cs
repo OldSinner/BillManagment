@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using api.Configuration;
 using Api.Data;
 using Api.Interfaces;
@@ -22,6 +23,57 @@ namespace Api.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _converter = converter ?? throw new ArgumentNullException(nameof(converter));
+        }
+
+        public async Task<ServiceResponse<string>> GetCsvFile(string userId, DateTime from, DateTime to)
+        {
+            try
+            {
+                Guid userGuid;
+                var parseSuccess = Guid.TryParse(userId, out userGuid);
+                if (!parseSuccess)
+                {
+                    return new ServiceResponse<string>()
+                    {
+                        IsSuccess = false,
+                        Errors = new List<string>() { "UserId is not valid" }
+                    };
+                }
+                var user = await _context.Users!.Where(x => x.Id == userGuid).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    return new ServiceResponse<string>()
+                    {
+                        IsSuccess = false,
+                        Data = null,
+                        Errors = new List<string>() { "User not found" }
+                    };
+                }
+
+                var bills = await _context.Bill!.Where(b => b.Owner!.Id == userGuid).Where(x => x.CreatedDate >= from && x.CreatedDate <= to).Include(x => x.Category).ToListAsync();
+
+                var builder = new StringBuilder();
+                builder.AppendLine($"Data,Kwota,Kategoria");
+                foreach (var bill in bills)
+                {
+                    builder.AppendLine($"{bill.CreatedDate.ToString("dd/MM/yyyy")},{bill.Amount.ToString(CultureInfo.InvariantCulture)},{bill.Category!.Name}");
+                }
+
+                return new ServiceResponse<string>()
+                {
+                    IsSuccess = true,
+                    Data = builder.ToString(),
+                    Errors = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<string>()
+                {
+                    IsSuccess = false,
+                    Errors = new List<string>() { ex.Message }
+                };
+            }
         }
 
         public async Task<ServiceResponse<DashboardModel>> GetDashboard(string userId)
@@ -150,9 +202,3 @@ namespace Api.Services
         }
     }
 }
-
-//  <tr>
-//           <td>{{numer}}</td>
-//           <td>{{kategoria}}</td>
-//           <td>{{sumaRachunków}}</td>
-//         </tr>
