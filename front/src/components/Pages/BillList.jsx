@@ -86,6 +86,8 @@ export default function BillList() {
 
   //Effects
   useEffect(() => {
+    amountFromRef.current.value = 0;
+    amountToRef.current.value = 100000;
     QueryCategory();
     QueryData();
   }, [refresh]);

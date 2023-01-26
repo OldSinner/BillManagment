@@ -9,11 +9,12 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import PersonCard from '../PersonCard';
-import AvatarMaks from '../../Assets/maksiuavatar.png';
-import AvatarSebastian from '../../Assets/seba.png';
-import AvatarMaja from '../../Assets/maja.png';
-import AvatarAdrian from '../../Assets/adi.png';
+import AboutUs from '../HeroComponents/AboutUs';
+import AboutApp from '../HeroComponents/AboutApp';
+import Timeline from '../HeroComponents/Timeline';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
 export default function MainPage() {
   return (
     <>
@@ -43,8 +44,7 @@ export default function MainPage() {
               </Text>{' '}
             </Heading>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-              Zarządzaj swoimi finansami w prosty i intuicyjny sposób, dzięki
-              naszej aplikacji.
+              Aplikacja wykonana na rzecz projektu "Zespołowy Projekt Informatyczny", na Uniwerystecie Kazimierza Wielkiego w Bydgoszczy
             </Text>
             <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
               <Button
@@ -58,9 +58,8 @@ export default function MainPage() {
                   window.location.href = '/login';
                 }}
               >
-                Dołącz do nas
+                Zaloguj się
               </Button>
-              <Button rounded={'full'}>Kim jesteśmy</Button>
             </Stack>
           </Stack>
         </Flex>
@@ -69,42 +68,18 @@ export default function MainPage() {
             alt={'Login Image'}
             objectFit={'cover'}
             src={
-              'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+              'https://i.imgur.com/nuK6uVC.jpeg'
             }
           />
         </Flex>
       </Stack>
       <Divider />
-      <Stack direction="row">
-        <PersonCard
-          name={'Maksymilian Przysiwek'}
-          desc={
-            'Lider projektu, interesuję się programowaniem, tworzeniem stron internetowych od stony backendu, uwielbiany przez wszystkich, UWIELBIA koty. Uważa je za rasę nadrzędną i czeka na powrót wielkiego Anubisa.'
-          }
-          avatar={AvatarMaks}
-        />
-        <PersonCard
-          name={'Maja Lisowska'}
-          desc={
-            'Interesuje się grafiką komputerową i jazdę konną, lubi taniec. Miłośniczka kotów.'
-          }
-          avatar={AvatarMaja}
-        />
-        <PersonCard
-          name={'Adrian Żabiński'}
-          desc={
-            'Interesuje się programowaniem, japońskimi samochodami i modyfikowaniem samochodów, w przeciwieństwie do reszty grupy preferuje psy.'
-          }
-          avatar={AvatarAdrian}
-        />
-        <PersonCard
-          name={'Sebastian Michalski'}
-          desc={
-            'Interesuje się tworzeniem gier, tworzeniem stron internetowych od strony frontendu, w wolnym czasie lubi grać.'
-          }
-          avatar={AvatarSebastian}
-        />
-      </Stack>
+      <AboutApp />
+      <Divider />
+      <AboutUs />
+      <Divider />
+      <Timeline />
+      <Divider></Divider>
     </>
   );
 }

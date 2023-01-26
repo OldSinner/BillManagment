@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 
 export default function PersonCard({ name, link, avatar, desc, badges }) {
   return (
-    <Center py={6}>
+    <Center py={6} >
       <Box
         maxW={'320px'}
         w={'full'}
@@ -22,6 +22,8 @@ export default function PersonCard({ name, link, avatar, desc, badges }) {
         rounded={'lg'}
         p={6}
         textAlign={'center'}
+        height='300px'
+        m={2}
       >
         <Avatar
           size={'xl'}
@@ -41,7 +43,7 @@ export default function PersonCard({ name, link, avatar, desc, badges }) {
             right: 3,
           }}
         />
-        <Heading fontSize={'2xl'} fontFamily={'body'}>
+        <Heading fontSize={'2xl'}>
           {name}
         </Heading>
         {link ? (
@@ -63,10 +65,10 @@ export default function PersonCard({ name, link, avatar, desc, badges }) {
         <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
           {badges
             ? badges.map(badge => {
-                <Badge px={2} py={1} bg={'gray.800'} fontWeight={'400'}>
-                  {badge}
-                </Badge>;
-              })
+              <Badge px={2} py={1} bg={'gray.800'} fontWeight={'400'}>
+                {badge}
+              </Badge>;
+            })
             : ''}
         </Stack>
       </Box>

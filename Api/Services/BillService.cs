@@ -223,7 +223,7 @@ namespace Api.Services
                         Errors = new List<string>() { "User not found" }
                     };
                 }
-                var bills = await _context.Bill!.Where(x => x.Owner!.Id == user.Id && Math.Abs(x.Amount) >= fromAmount && Math.Abs(x.Amount) >= toAmount && x.CreatedDate >= from && x.CreatedDate <= to).Include(x => x.Category).ToListAsync();
+                var bills = await _context.Bill!.Where(x => x.Owner!.Id == user.Id && Math.Abs(x.Amount) >= fromAmount && Math.Abs(x.Amount) <= toAmount && x.CreatedDate >= from && x.CreatedDate <= to).Include(x => x.Category).ToListAsync();
                 List<BillResponse> billResponses = new List<BillResponse>();
 
                 foreach (var bill in bills)

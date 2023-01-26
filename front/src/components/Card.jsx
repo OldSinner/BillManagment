@@ -9,11 +9,13 @@ import {
   Link,
   Badge,
   useColorModeValue,
+  Spinner,
 } from '@chakra-ui/react';
 
 export default function Card({
   Title,
   Content,
+  isLoaded,
   Color,
   maxW = '400px',
   w = '100%',
@@ -35,8 +37,8 @@ export default function Card({
         textAlign={'center'}
         borderColor={Color}
       >
-        <Heading fontSize={'2xl'} fontFamily={'body'} textAlign={'left'}>
-          {Title}
+        <Heading fontSize={'2xl'} textAlign={'left'}>
+          {isLoaded ? Title : <Spinner />}
         </Heading>
 
         {Content}

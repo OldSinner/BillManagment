@@ -1,4 +1,4 @@
-const baseApi = 'http://localhost:5115';
+const baseApi = 'http://oldsinner.net/api';
 export const Apischema = {
   register: baseApi + '/auth/register',
   login: baseApi + '/auth/login',

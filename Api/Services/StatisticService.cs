@@ -17,12 +17,14 @@ namespace Api.Services
         private readonly Context _context;
         private readonly ILogger<StatisticService> logger;
         private readonly IConverter _converter;
+        private readonly IConfiguration configuration;
 
-        public StatisticService(Context context, ILogger<StatisticService> logger, IConverter converter)
+        public StatisticService(Context context, ILogger<StatisticService> logger, IConverter converter, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _converter = converter ?? throw new ArgumentNullException(nameof(converter));
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public async Task<ServiceResponse<string>> GetCsvFile(string userId, DateTime from, DateTime to)
@@ -144,8 +146,10 @@ namespace Api.Services
                         Errors = new List<string>() { "User not found" }
                     };
                 }
-
-                var content = File.ReadAllText("Assets/stats.html");
+                var absolutePath = Path.GetFullPath(Directory.GetCurrentDirectory());
+                Console.WriteLine("Path: " + absolutePath);
+                var pathIsNot = Path.Combine(Directory.GetCurrentDirectory(), "s    tats.html");
+                var content = File.ReadAllText(pathIsNot);
 
                 if (String.IsNullOrEmpty(content))
                 {

@@ -2,6 +2,7 @@ import {
   Box,
   Flex,
   SimpleGrid,
+  Spinner,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -13,24 +14,85 @@ import { Apischema } from './ApiSchema';
 import axios from 'axios';
 import { GetUser } from '../Utils/Auth';
 
+import {
+  LineChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  Legend,
+  ReferenceArea,
+  ReferenceLine,
+  ReferenceDot,
+  LabelList,
+  Label,
+  ResponsiveContainer,
+  AreaChart,
+} from 'recharts';
+
+const datatest = [
+  {
+    "name": "Page A",
+    "uv": 4000,
+    "pv": 2400,
+    "amt": 2400
+  },
+  {
+    "name": "Page B",
+    "uv": 3000,
+    "pv": 1398,
+    "amt": 2210
+  },
+  {
+    "name": "Page C",
+    "uv": 2000,
+    "pv": 9800,
+    "amt": 2290
+  },
+  {
+    "name": "Page D",
+    "uv": 2780,
+    "pv": 3908,
+    "amt": 2000
+  },
+  {
+    "name": "Page E",
+    "uv": 1890,
+    "pv": 4800,
+    "amt": 2181
+  },
+  {
+    "name": "Page F",
+    "uv": 2390,
+    "pv": 3800,
+    "amt": 2500
+  },
+  {
+    "name": "Page G",
+    "uv": 3490,
+    "pv": 4300,
+    "amt": 2100
+  }
+];
+const labels = [
+  'Styczeń',
+  'Luty',
+  'Marzec',
+  'Kwiecień',
+  'Maj',
+  'Czerwiec',
+  'Lipiec',
+  'Sierpień',
+  'Wrzesień',
+  'Październik',
+  'Listopad',
+  'Grudzień',
+];
 const state = {
-  labels: [
-    'Styczeń',
-    'Luty',
-    'Marzec',
-    'Kwiecień',
-    'Maj',
-    'Czerwiec',
-    'Lipiec',
-    'Sierpień',
-    'Wrzesień',
-    'Październik',
-    'Listopad',
-    'Grudzień',
-  ],
+
   datasets: [
     {
-      label: 'Rainfall',
       fill: false,
       hitRadius: 100,
       hoverRadius: 10,
@@ -64,17 +126,22 @@ const state = {
 export function Dashboard() {
   var user = GetUser();
   const [summary, setSummary] = useState();
-
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [chartdata, setChartData] = useState([]);
   const QuerySummaryData = () => {
     axios
       .get(Apischema.summary, {
         headers: { Authorization: 'bearer ' + user.Token },
       })
       .then(res => {
+        var data = [];
         for (let i = 1; i < 13; i++) {
-          state.datasets[0].data[i - 1] = res.data.data.monthly[i] ?? 0;
+          data.push({ name: labels[i - 1], "Przepływ": res.data.data.monthly[i] ?? 0, "unit": "PLN" });
         }
         setSummary(res.data.data);
+        setChartData(data);
+        console.log(data)
+        setIsLoaded(true)
       });
   };
 
@@ -86,7 +153,8 @@ export function Dashboard() {
       <Box w={'100%'} h="auto">
         <Card
           Title={'Wykres Przepływu pieniędzy'}
-          Content={<MoneyChart />}
+          isLoaded={isLoaded}
+          Content={isLoaded ? <MoneyChart2 data={chartdata} /> : <Spinner />}
           Color={useColorModeValue('blue.300', 'blue.300')}
           w={'90%'}
           maxW={'100%'}
@@ -105,6 +173,7 @@ export function Dashboard() {
               h={'100px'}
               Color={'blue.400'}
               Title={summary?.balance.toFixed(2) + ' PLN'}
+              isLoaded={isLoaded}
               Content={
                 <Text textAlign={'left'} color="gray.300">
                   Stan konta
@@ -116,6 +185,7 @@ export function Dashboard() {
               h={'100px'}
               Color={'green.400'}
               Title={summary?.income.toFixed(2) + ' PLN'}
+              isLoaded={isLoaded}
               Content={
                 <Text textAlign={'left'} color="gray.300">
                   Przychody
@@ -127,6 +197,7 @@ export function Dashboard() {
               h={'100px'}
               Color={'red.400'}
               Title={summary?.outcome.toFixed(2) + ' PLN'}
+              isLoaded={isLoaded}
               Content={
                 <Text textAlign={'left'} color="gray.300">
                   Wydatki
@@ -138,6 +209,7 @@ export function Dashboard() {
               h={'100px'}
               Color={'yellow.400'}
               Title={(summary?.income + summary?.outcome).toFixed(2) + ' PLN'}
+              isLoaded={isLoaded}
               Content={
                 <Text textAlign={'left'} color="gray.300">
                   Przepływ
@@ -151,6 +223,17 @@ export function Dashboard() {
   );
 }
 
+function MoneyChart2({ data }) {
+  return <ResponsiveContainer width="100%" height="80%">
+    <AreaChart data={data}
+      margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Area type="monotone" dataKey="Przepływ" stroke="#48bb78" fill="#48bb78" />
+      <Tooltip payload={[{ name: '05-01', value: 12, unit: 'kg' }]} />
+    </AreaChart>
+  </ResponsiveContainer>
+}
 function MoneyChart() {
   const DetermineSize = () => {
     if (window.innerWidth < 1000) return 300;

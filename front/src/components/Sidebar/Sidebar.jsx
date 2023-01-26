@@ -18,6 +18,7 @@ import {
   HiOutlineHome,
   HiOutlineLogout,
   HiOutlineCog,
+  HiFilter
 } from 'react-icons/hi';
 import { GetUser, LogOut } from '../../Utils/Auth';
 export function Sidebar({ isOpen, setIsOpen }) {
@@ -50,7 +51,7 @@ export function Sidebar({ isOpen, setIsOpen }) {
         >
           {isOpen ? <HiArrowCircleLeft /> : <HiArrowCircleRight />}
         </Center>
-        <Divider m={1} w={isOpen ? '100%' : '75%'} transition="all 0.5s ease" />
+        <Divider m={1} w={isOpen ? '90%' : '75%'} transition="all 0.5s ease" />
 
         <Center>
           <Image
@@ -62,7 +63,7 @@ export function Sidebar({ isOpen, setIsOpen }) {
             transition="all 0.5s ease"
           />
         </Center>
-        <Divider m={1} w={isOpen ? '100%' : '75%'} transition="all 0.5s ease" />
+        <Divider m={1} w={isOpen ? '90%' : '75%'} transition="all 0.5s ease" />
         <Flex
           flexDir="column"
           justifyContent={'center'}
@@ -82,7 +83,7 @@ export function Sidebar({ isOpen, setIsOpen }) {
             icon={HiCurrencyDollar}
           />
           <NavItem text={'Raporty'} link="/raports"
-            icon={HiCurrencyDollar}
+            icon={HiFilter}
             isOpen={isOpen} />
           <NavItem
             text={'Ustawienia'}
@@ -90,9 +91,8 @@ export function Sidebar({ isOpen, setIsOpen }) {
             isOpen={isOpen}
             icon={HiOutlineCog}
           />
-          <NavItem text={'Home'} link="/dash" isOpen={isOpen} />
 
-          <Divider w={isOpen ? '100%' : '75%'} transition="all 0.5s ease" />
+          <Divider w={isOpen ? '90%' : '75%'} transition="all 0.5s ease" />
         </Flex>
       </Flex>
       <Flex flexDir={'column'} justifyContent="center">
@@ -144,7 +144,7 @@ export function NavItem({ text, icon, link, isOpen }) {
     <Flex
       boxShadow={' 0px 0px 45px -17px rgba(66, 68, 90, 1);'}
       p={10}
-      w={isOpen ? '100%' : '20%'}
+      w={isOpen ? '90%' : '20%'}
       borderRadius={'lg'}
       align={'center'}
       m={2}
